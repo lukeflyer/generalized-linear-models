@@ -96,18 +96,55 @@ We will use the following variables:
 
 a.  Fit a linear regression model with `price` as the response variable and `sqft` as the predictor variable (Model 1). Interpret the slope coefficient in terms of the expected change in price when `sqft` increases by 100.
 
-```{r}
+```{r, warning = F, message = F}
 library(tidyverse)
-library(readr)
-kingCountyHouses <- read_csv("homeworks/data/kingCountyHouses.csv")
-View(kingCountyHouses)
+library(tidymodels)
+library(knitr)
+houses <- read_csv("/home/guest/310/homeworks/data/kingCountyHouses.csv")
+
+linear_reg() |>
+  set_engine("lm") |>
+  fit(price ~ sqft, data = houses) |>
+  tidy() |>
+  kable()
 ```
+
+For every increase of 100 square feet, the price of a house is expected to increase by \$28,062.
 
 a.  Fit Model 2, where `logprice` (the natural log of price) is now the response variable and `sqft` is still the predictor variable. How is the `logprice` expected to change when `sqft` increases by 100?
 
-b.  Recall that $log(a) - log(b) = log(\frac{a}{b})$. Use this to derive how the `price` is expected to change when `sqft` increases by 100 based on Model 2.
+```{r, warning = F, message = F}
 
-c.  Fit Model 3, where `price` and `logsqft` (the natural log of sqft) are the response and predictor variables, respectively. How does the price expected to change when sqft increases by 10%? *As a hint, this is the same as multiplying sqft by 1.10.*
+linear_reg() |>
+  set_engine("lm") |>
+  fit(log(price) ~ sqft, data = houses) |>
+  tidy() |>
+  kable()
+```
+
+For every increase of 100 square feet, the log(price) of a house is expected to increase by .0399 log(dollars).
+
+a.  Recall that $log(a) - log(b) = log(\frac{a}{b})$. Use this to derive how the `price` is expected to change when `sqft` increases by 100 based on Model 2.
+
+For every increase of 100 square feet, the price of a house is expected to be multiplied by a factor of $e^{0.0399}$. This is because 0.0399 = $log(\frac{a}{b})$, and we then need to exponentiate both sides to solve for the price ratio of a house with 100 more square feet to the price of the house with 100 fewer.
+
+a.  Fit Model 3, where `price` and `logsqft` (the natural log of sqft) are the response and predictor variables, respectively. How does the price expected to change when sqft increases by 10%? *As a hint, this is the same as multiplying sqft by 1.10.*
+
+```{r, warning = F, message = F}
+
+linear_reg() |>
+  set_engine("lm") |>
+  fit(price ~ log(sqft), data = houses) |>
+  tidy() |>
+  kable()
+```
+
+```{r}
+
+log(1.1) * 528647.5
+```
+
+For a 10% increase in square feet (multiplicative increase of 1.1), we expect the price of a house to increase by \$50385.49.
 
 ::: callout-tip
 [Click here](https://github.com/STA210-Sp19/supplemental-notes/blob/master/log-transformations.pdf) for notes on interpreting model effects for log-transformed response and/or predictor variables.
