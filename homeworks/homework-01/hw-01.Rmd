@@ -33,23 +33,23 @@ Consider the following scenario:
 
 a.  Identify the response and predictor variable.
 
-The response variable is the number of chirps per minute, and they predictor variable is temperature.
+    The response variable is the number of chirps per minute, and they predictor variable is temperature.
 
-a.  Write the complete specification of the statistical model.
+b.  Write the complete specification of the statistical model.
 
-$Y_i = \beta_0 + \beta_1(Temperature_i) + \epsilon_i$
+    $Y_i = \beta_0 + \beta_1(Temperature_i) + \epsilon_i$
 
-In this case, $\beta_0$ represents the true intercept—the expected number of cricket chirps per minute at temperature = 0. $\beta_1$ represents the true slope—the expected increase in cricket chirps per minute for every unit increase in temperature, assuming the rate of increase is linear. $\epsilon_i$ represent the deviations of the actual chirps per minute from the expected number predicted by the model.
+    In this case, $\beta_0$ represents the true intercept—the expected number of cricket chirps per minute at temperature = 0. $\beta_1$ represents the true slope—the expected increase in cricket chirps per minute for every unit increase in temperature, assuming the rate of increase is linear. $\epsilon_i$ represent the deviations of the actual chirps per minute from the expected number predicted by the model.
 
-a.  Write the assumptions for linear regression in the context of the problem.
+c.  Write the assumptions for linear regression in the context of the problem.
 
-Linearity: The mean number of cricket chirps per minute is linearly related to temperature.
+    Linearity: The mean number of cricket chirps per minute is linearly related to temperature.
 
-Independence: Each observation of cricket chirps per minute and temperature is independent and not related to each other.
+    Independence: Each observation of cricket chirps per minute and temperature is independent and not related to each other.
 
-Normality: The cricket chirps per minute are normally distributed at any given temperature.
+    Normality: The cricket chirps per minute are normally distributed at any given temperature.
 
-Equal variance: Variability of cricket chirps per minute is the same at all temperatures.
+    Equal variance: Variability of cricket chirps per minute is the same at all temperatures.
 
 ## Exercise 2
 
@@ -61,11 +61,11 @@ Consider the following scenario:
 
 a.  Identify the response and predictor variables.
 
-The response variable is depression score, and the predictor variable is estrogen patch vs. control group.
+    The response variable is depression score, and the predictor variable is estrogen patch vs. control group.
 
-a.  Identify which model assumption(s) are violated. Briefly explain your choice.
+b.  Identify which model assumption(s) are violated. Briefly explain your choice.
 
-Independence seems to be most violated since depression scores were recorded on 6 different visits, meaning that there are 6 observations for each patient. This would mean that knowing about one of those observations could provide information about another.
+    Independence seems to be most violated since depression scores were recorded on 6 different visits, meaning that there are 6 observations for each patient. This would mean that knowing about one of those observations could provide information about another.
 
 ## Exercise 3
 
@@ -75,11 +75,11 @@ Use the [Kentucky Derby case study](https://bookdown.org/roback/bookdown-BeyondM
 
 a.  Consider [Equation (1.3)](https://bookdown.org/roback/bookdown-BeyondMLR/ch-MLRreview.html#multiple-linear-regression-with-two-predictors) in Section 1.6.3. Show why we have to be sure to say "holding year constant", "after adjusting for year", or an equivalent statement, when interpreting $\beta_2$.
 
-We have to say "holding year constant" because the year is another predictor in this linear model. Therefore, $\beta_2$ is the expected difference in winning speeds between slow and fast conditions after accounting for year.
+    We have to say "holding year constant" because the year is another predictor in this linear model. Therefore, $\beta_2$ is the expected difference in winning speeds between slow and fast conditions after accounting for year.
 
-a.  Briefly explain why there is no error (random variation) term $\epsilon_i$ in [Equation (1.4)](https://bookdown.org/roback/bookdown-BeyondMLR/ch-MLRreview.html#multiple-linear-regression-with-an-interaction-term) in Section 1.6.6?
+b.  Briefly explain why there is no error (random variation) term $\epsilon_i$ in [Equation (1.4)](https://bookdown.org/roback/bookdown-BeyondMLR/ch-MLRreview.html#multiple-linear-regression-with-an-interaction-term) in Section 1.6.6?
 
-This is because this equation gives us "estimated winning speeds" which does not have to include this error term. The actual observations from the model will have error, but the estimation equation does not.
+    This is because this equation gives us "estimated winning speeds" which does not have to include this error term. The actual observations from the model will have error, but the estimation equation does not.
 
 ## Exercise 4
 
@@ -96,55 +96,55 @@ We will use the following variables:
 
 a.  Fit a linear regression model with `price` as the response variable and `sqft` as the predictor variable (Model 1). Interpret the slope coefficient in terms of the expected change in price when `sqft` increases by 100.
 
-```{r, warning = F, message = F}
-library(tidyverse)
-library(tidymodels)
-library(knitr)
-houses <- read_csv("/home/guest/310/homeworks/data/kingCountyHouses.csv")
+    ```{r, warning = F, message = F}
+    library(tidyverse)
+    library(tidymodels)
+    library(knitr)
+    houses <- read_csv("/home/guest/310/homeworks/data/kingCountyHouses.csv")
 
-linear_reg() |>
-  set_engine("lm") |>
-  fit(price ~ sqft, data = houses) |>
-  tidy() |>
-  kable()
-```
+    linear_reg() |>
+      set_engine("lm") |>
+      fit(price ~ sqft, data = houses) |>
+      tidy() |>
+      kable()
+    ```
 
-For every increase of 100 square feet, the price of a house is expected to increase by \$28,062.
+    For every increase of 100 square feet, the price of a house is expected to increase by \$28,062.
 
-a.  Fit Model 2, where `logprice` (the natural log of price) is now the response variable and `sqft` is still the predictor variable. How is the `logprice` expected to change when `sqft` increases by 100?
+b.  Fit Model 2, where `logprice` (the natural log of price) is now the response variable and `sqft` is still the predictor variable. How is the `logprice` expected to change when `sqft` increases by 100?
 
-```{r, warning = F, message = F}
+    ```{r, warning = F, message = F}
 
-linear_reg() |>
-  set_engine("lm") |>
-  fit(log(price) ~ sqft, data = houses) |>
-  tidy() |>
-  kable()
-```
+    linear_reg() |>
+      set_engine("lm") |>
+      fit(log(price) ~ sqft, data = houses) |>
+      tidy() |>
+      kable()
+    ```
 
-For every increase of 100 square feet, the log(price) of a house is expected to increase by .0399 log(dollars).
+    For every increase of 100 square feet, the log(price) of a house is expected to increase by .0399 log(dollars).
 
-a.  Recall that $log(a) - log(b) = log(\frac{a}{b})$. Use this to derive how the `price` is expected to change when `sqft` increases by 100 based on Model 2.
+c.  Recall that $log(a) - log(b) = log(\frac{a}{b})$. Use this to derive how the `price` is expected to change when `sqft` increases by 100 based on Model 2.
 
-For every increase of 100 square feet, the price of a house is expected to be multiplied by a factor of $e^{0.0399}$. This is because 0.0399 = $log(\frac{a}{b})$, and we then need to exponentiate both sides to solve for the price ratio of a house with 100 more square feet to the price of the house with 100 fewer.
+    For every increase of 100 square feet, the price of a house is expected to be multiplied by a factor of $e^{0.0399}$. This is because 0.0399 = $log(\frac{a}{b})$, and we then need to exponentiate both sides to solve for the price ratio of a house with 100 more square feet to the price of the house with 100 fewer.
 
-a.  Fit Model 3, where `price` and `logsqft` (the natural log of sqft) are the response and predictor variables, respectively. How does the price expected to change when sqft increases by 10%? *As a hint, this is the same as multiplying sqft by 1.10.*
+d.  Fit Model 3, where `price` and `logsqft` (the natural log of sqft) are the response and predictor variables, respectively. How does the price expected to change when sqft increases by 10%? *As a hint, this is the same as multiplying sqft by 1.10.*
 
-```{r, warning = F, message = F}
+    ```{r, warning = F, message = F}
 
-linear_reg() |>
-  set_engine("lm") |>
-  fit(price ~ log(sqft), data = houses) |>
-  tidy() |>
-  kable()
-```
+    linear_reg() |>
+      set_engine("lm") |>
+      fit(price ~ log(sqft), data = houses) |>
+      tidy() |>
+      kable()
+    ```
 
-```{r}
+    ```{r}
 
-log(1.1) * 528647.5
-```
+    log(1.1) * 528647.5
+    ```
 
-For a 10% increase in square feet (multiplicative increase of 1.1), we expect the price of a house to increase by \$50385.49.
+    For a 10% increase in square feet (multiplicative increase of 1.1), we expect the price of a house to increase by \$50385.49.
 
 ::: callout-tip
 [Click here](https://github.com/STA210-Sp19/supplemental-notes/blob/master/log-transformations.pdf) for notes on interpreting model effects for log-transformed response and/or predictor variables.
@@ -157,7 +157,7 @@ The goal of this analysis is to use characteristics of 593 colleges and universi
 The data set is located in `college-data.csv` in the `data` folder. We will focus on the following variables:
 
 | variable           | class     | description                                                                           |
-|:----------------|:----------------|:--------------------------------------|
+|:--------------|:--------------|:-----------------------------------------|
 | name               | character | Name of school                                                                        |
 | state_name         | character | state name                                                                            |
 | type               | character | Public or private                                                                     |
@@ -166,7 +166,51 @@ The data set is located in `college-data.csv` in the `data` folder. We will focu
 | out_of_state_total | double    | Total cost for in-state residents in USD (sum of room & board + out of state tuition) |
 
 a.  Visualize the distribution of the response variable `early_career_pay`. Write 1 - 2 observations from the plot.
+
+    ```{r, warning = F, message = F}
+
+    college <- read_csv("/home/guest/310/homeworks/data/college-data.csv")
+
+    college |>
+      ggplot(aes(x = early_career_pay)) +
+      geom_histogram(color = "black", fill = "light green") +
+      theme_bw() +
+      labs(
+        x = "Median salary for alumni with 0 - 5 years experience (in US dollars)",
+        y = "Number of Colleges/Universities",
+        title = "Median Early Career Pay for Alumni Per College")
+    ```
+
+    Most of the data seems to be captured between the \$40,000 and \$60,000 marks, with a median somewhere around \$50,000. Additionally, the data is skewed left, with a longer right tail containing some schools whose students have very large early salaries.
+
 b.  Visualize the relationship between (i) `early_career_pay` and `type` and (ii) `early_career_pay` and `stem_percent`. Write an observation from each plot.
+
+    ```{r, message = F, warning = F}
+
+    college |>
+      ggplot(aes(x = early_career_pay, fill = type)) +
+      geom_histogram(color = "black") +
+      theme_bw() +
+      labs(
+        x = "Median salary for alumni with 0 - 5 years experience (in US dollars)",
+        y = "Number of Colleges/Universities",
+        title = "Median Early Career Pay for Alumni Per College",
+        fill = "Type of College")
+    ```
+
+    ```{r, message = F, warning = F}
+
+    college |>
+    ggplot(aes(x = stem_percent, y = early_career_pay)) +
+    geom_point(alpha = 0.75) +
+    theme_bw() +
+    labs(x = "Percent of Degrees Awarded in STEM Subjects",
+    y = "Median Early Career Pay (USD)",
+    title = "Correlation Between Median Early Career Pay and STEM Focus")
+    ```
+
+    From the first plot, we can see that the distributions between private and public schools seem to be pretty similar, one difference being that private schools have a higher cap in early career pay, with the right tail of their data being longer. From the second plot, we can see a relatively clear positive correlation between early career pay and the percent of STEM degrees awarded, which makes sense given the higher pay of STEM careers.
+
 c.  Below is the specification of the statistical model for this analysis. Fit the model and neatly display the results using 3 digits. Display the 95% confidence interval for the coefficients.
 
 ```{=tex}
@@ -175,12 +219,31 @@ early\_career\_pay_{i} = \beta_0 &+ \beta_1~out\_of\_state\_total_{i} + \beta_2 
 &+ \beta_3 ~ stem\_percent_{i} + \beta_4 ~ type * stem\_percent_{i} \\ &+ \epsilon_{i}, \hspace{5mm} \text{where } \epsilon_i \sim N(0, \sigma^2)
 \end{align}
 ```
+```{r, message = F, warning = F}
+
+linear_reg() |>
+  set_engine("lm") |>
+  fit(early_career_pay ~ out_of_state_total + type + stem_percent + type * stem_percent,
+data = college) |>
+  tidy(conf.int = TRUE) |>
+  kable(digits = 3)
+```
+
 d.  How many degrees of freedom are there in the estimate of the regression standard error $\sigma$?
+
+    There are 593 - 5 = 588 degrees of freedom in the estimate of the regression standard error $\sigma$ because there are 5 coefficients in the model, and that number is subtracted from the sample size.
+
 e.  What is the 95% confidence interval for the amount in which the intercept for public institutions differs from private institutions?
+
+    We are 95% confident that the true mean difference in median early career pay between public and private institutions is between \$-324.813 and \$2,694.853.
 
 ## Exercise 6
 
 Use the analysis from the previous exercise to write a paragraph (\~ 4 - 5 sentences) describing the differences in early career pay based on the institution characteristics. *The summary should be consistent with the results from the previous exercise, comprehensive, answers the primary analysis question, and tells a cohesive story (e.g., a list of interpretations will not receive full credit).*
+
+During this exploratory data analysis, we first examined the differences in early career pay between private and public schools. The distributions looked very similar, with the only difference being a longer right tail for private schools reaching the \$90,000 mark while public schools only reached around \$70,000. In the regression analysis, the 95% confidence interval for the difference in early career pay between public and private institutions (holding all other variables constant) included 0, meaning that the effect of school type (public vs. private) on early career pay is not significant. A scatterplot comparing early career pay and STEM degree percentage appeared to show a positive correlation, and the regression analysis bore this out. For private universities, for every 1 percent increase in STEM degree percentage, we expect a \$214.306 increase in early career pay (holding all other variables constant). For public universities, for every 1 percent increase in STEM degree percentage, we expect a \$214.306 + \$49.538 = \$263.844 increase in early career pay (holding all other variables constant). The p-value associated with the STEM degree variable was less than 0.05, so we can say that the effect of STEM degree percentage on early career pay is significant. However, the p-value associated with the interaction effect between STEM degrees and school type (public vs. private) was not less than 0.05. Therefore, we can say that there is insufficient evidence to suggest that the effect of STEM degree percentage on early career pay depends on school type. Finally, we also found in the regression model that for every \$1 increase in out of state total cost, we would expect an increase of \$0.253 in early career pay. This effect was significant, suggesting a positive relationship between out of state cost and early career pay. Overall, these results help us understand some possible explanations for variability in early career pay among alumni.
+
+# 
 
 # Grading
 
