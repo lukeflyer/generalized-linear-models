@@ -39,7 +39,7 @@ b.  Write the complete specification of the statistical model.
 
     $Y_i = \beta_0 + \beta_1(Temperature_i) + \epsilon_i$
 
-    In this case, $\beta_0$ represents the true intercept—the expected number of cricket chirps per minute at temperature = 0. $\beta_1$ represents the true slope—the expected increase in cricket chirps per minute for every unit increase in temperature, assuming the rate of increase is linear. $\epsilon_i$ represent the deviations of the actual chirps per minute from the expected number predicted by the model.
+    In this case, $\beta_0$ represents the true intercept—the expected number of cricket chirps per minute at temperature = 0. $\beta_1$ represents the true slope—the expected increase in cricket chirps per minute for every unit increase in temperature, assuming the rate of increase is linear. $\epsilon_i$ represent the deviations of the actual chirps per minute from the expected number predicted by the model. $Y_i$ represents the real observations of cricket chirps per minute.
 
 c.  Write the assumptions for linear regression in the context of the problem.
 
@@ -188,14 +188,15 @@ b.  Visualize the relationship between (i) `early_career_pay` and `type` and (ii
     ```{r, message = F, warning = F}
 
     college |>
-      ggplot(aes(x = early_career_pay, fill = type)) +
-      geom_histogram(color = "black") +
+      ggplot(aes(y = early_career_pay, x = type)) +
+      geom_boxplot(color = "black", fill = "light green") +
       theme_bw() +
       labs(
-        x = "Median salary for alumni with 0 - 5 years experience (in US dollars)",
-        y = "Number of Colleges/Universities",
-        title = "Median Early Career Pay for Alumni Per College",
-        fill = "Type of College")
+        x = "Type of College/University",
+        y = "Median Early Career Pay (USD)",
+        title = "Median Early Career Pay (Public vs. Private)"
+        )
+
     ```
 
     ```{r, message = F, warning = F}
@@ -209,7 +210,7 @@ b.  Visualize the relationship between (i) `early_career_pay` and `type` and (ii
     title = "Correlation Between Median Early Career Pay and STEM Focus")
     ```
 
-    From the first plot, we can see that the distributions between private and public schools seem to be pretty similar, one difference being that private schools have a higher cap in early career pay, with the right tail of their data being longer. From the second plot, we can see a relatively clear positive correlation between early career pay and the percent of STEM degrees awarded, which makes sense given the higher pay of STEM careers.
+    From the first plot, we can see that the distributions between private and public schools seem to be pretty similar, one difference being that private schools have a higher cap in early career pay, with some schools landing alumni in the \$80K-\$90K range. From the second plot, we can see a relatively clear positive correlation between early career pay and the percent of STEM degrees awarded, which makes sense given the generally higher pay of STEM careers.
 
 c.  Below is the specification of the statistical model for this analysis. Fit the model and neatly display the results using 3 digits. Display the 95% confidence interval for the coefficients.
 
@@ -241,7 +242,7 @@ e.  What is the 95% confidence interval for the amount in which the intercept fo
 
 Use the analysis from the previous exercise to write a paragraph (\~ 4 - 5 sentences) describing the differences in early career pay based on the institution characteristics. *The summary should be consistent with the results from the previous exercise, comprehensive, answers the primary analysis question, and tells a cohesive story (e.g., a list of interpretations will not receive full credit).*
 
-During this exploratory data analysis, we first examined the differences in early career pay between private and public schools. The distributions looked very similar, with the only difference being a longer right tail for private schools reaching the \$90,000 mark while public schools only reached around \$70,000. In the regression analysis, the 95% confidence interval for the difference in early career pay between public and private institutions (holding all other variables constant) included 0, meaning that the effect of school type (public vs. private) on early career pay is not significant. A scatterplot comparing early career pay and STEM degree percentage appeared to show a positive correlation, and the regression analysis bore this out. For private universities, for every 1 percent increase in STEM degree percentage, we expect a \$214.306 increase in early career pay (holding all other variables constant). For public universities, for every 1 percent increase in STEM degree percentage, we expect a \$214.306 + \$49.538 = \$263.844 increase in early career pay (holding all other variables constant). The p-value associated with the STEM degree variable was less than 0.05, so we can say that the effect of STEM degree percentage on early career pay is significant. However, the p-value associated with the interaction effect between STEM degrees and school type (public vs. private) was not less than 0.05. Therefore, we can say that there is insufficient evidence to suggest that the effect of STEM degree percentage on early career pay depends on school type. Finally, we also found in the regression model that for every \$1 increase in out of state total cost, we would expect an increase of \$0.253 in early career pay. This effect was significant, suggesting a positive relationship between out of state cost and early career pay. Overall, these results help us understand some possible explanations for variability in early career pay among alumni.
+During this exploratory data analysis, we first examined the differences in early career pay between private and public schools. The distributions looked very similar, with the only difference being a longer right tail for private schools reaching the \$90,000 mark while public schools only reached around \$70,000. In the regression analysis, the 95% confidence interval for the difference in early career pay between public and private institutions (holding all other variables constant) included 0, meaning that the effect of school type (public vs. private) on early career pay is not significant (holding all other variables constant). A scatterplot comparing early career pay and STEM degree percentage appeared to show a positive correlation, and the regression analysis bore this out. For private universities, for every 1 percent increase in STEM degree percentage, we expect a \$214.306 increase in early career pay (holding all other variables constant). For public universities, for every 1 percent increase in STEM degree percentage, we expect a \$214.306 + \$49.538 = \$263.844 increase in early career pay (holding all other variables constant). The p-value associated with the STEM degree variable was less than 0.05, so we can say that the effect of STEM degree percentage on early career pay is significant (holding all other variables constant). However, the p-value associated with the interaction effect between STEM degrees and school type (public vs. private) was not less than 0.05. Therefore, we can say that there is insufficient evidence to suggest that the effect of STEM degree percentage on early career pay depends on school type (holding all other variables constant). Finally, we also found in the regression model that for every \$1 increase in out of state total cost, we would expect an increase of \$0.253 in early career pay. This effect was significant, suggesting a positive relationship between out of state cost and early career pay (holding all other variables constant). Overall, these results help us understand some possible explanations for variability in early career pay among alumni.
 
 # 
 
