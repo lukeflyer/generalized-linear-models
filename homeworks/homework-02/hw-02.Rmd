@@ -28,33 +28,49 @@ The SD of a binary random variable is $\sqrt{p(1-p)}$ , so the variance is simpl
 
 How are hypergeometric and binomial random variables different? How are they similar?
 
+Both of these random variables represent the number of successes in a fixed number of trials given n, the number of trials and p, the probability of a success. The only difference is that binomial random variables assume replacement, meaning that the probability of success is constant for each trial, but hypergeometric assumes no replacement, meaning that the probability of success depends on the outcome of previous trials (e.g. drawing hearts out of a deck of cards without replacing each drawn card).
+
 ## Exercise 3
 
 How are exponential and Poisson random variables related?
+
+A Poisson random variable counts the number of events per unit of time/space for which the number of events depends upon the interval of time/space. For example, a poisson distribution might count the number of snowflakes that fall on a roof in 1 hour. A exponential distribution, in this example, might predict the time it takes for the first snowflake to fall on the roof. Exponential distributions give us predictions for the time before or between events.
 
 ## Exercise 4
 
 How are geometric and exponential random variables similar? How are they different?
 
+Geometric and exponential random variables are similar in that they both model the time/number of trials until a event occurs. They also both have the "memoryless" property, meaning that the probabilities they generate are independent from past trials/number of time elapsed. They are different because geometric distributions map onto discrete values (number of trials), while exponential distributions map onto continuous values (time or space).
+
 ## Exercise 5
 
 A university's college of sciences is electing a new board of 5 members. There are 35 applicants, 10 of which come from the math department. What distribution could be helpful to model the probability of electing $X$ board members from the math department?
+
+A hypergeometric distribution would help with this probability. This distribution would give us the probability for each possible value of X (1-5) and would take into consideration the fact that this process is done without replacement.
 
 ## Exercise 6
 
 Chapter 1 asked you to consider a scenario where *"The Minnesota Pollution Control Agency is interested in using traffic volume data to generate predictions of particulate distributions as measured in counts per cubic feet."* What distribution might be useful to model this count per cubic foot? Why?
 
+A Poisson distribution would be useful here because it counts the number of events per unit of time/space for which the number of events depends upon the interval of time/space. In this example, it would count the number of particles per cubic feet and give estimations based on the distribution.
+
 ## Exercise 7
 
 Chapter 1 also asked you to consider a scenario where *"Researchers are attempting to see if socioeconomic status and parental stability are predictive of low birthweight. They classify a low birthweight as below 2500 g, hence our response is binary: 1 for low birthweight, and 0 when the birthweight is not low."* What distribution might be useful to model if a newborn has low birthweight?
+
+A binary/Bernoulli distrubtion would be useful here since we are trying to model probabilities of a binary variable. In this case, 1 for low birthweight, and 0 for not low birthweight.
 
 ## Exercise 8
 
 Chapter 1 also asked you to consider a scenario where *"Researchers are interested in how elephant age affects mating patterns among males. In particular, do older elephants have greater mating success, and is there an optimal age for mating among males? Data collected includes, for each elephant, age and number of matings in a given year."* Which distribution would be useful to model the number of matings in a given year for these elephants? Why?
 
+A Poisson distribution would be useful here because it counts the number of events per unit of time/space for which the number of events depends upon the interval of time/space. In this example, it would count the number of matings per year and give estimations based on the distribution.
+
 ## Exercise 9
 
 Describe a scenario which could be modeled using a gamma distribution.
+
+Suppose I am a birdwatcher whose goal for the day is to record the appearance of 5 birds coming to a feeder. Suppose the number of birds who visit the feeder per house follows a Poisson distribution. I could then use a gamma distribution to model the amount of time it would take to record 5 birds since gamma distributions model wait time before r number of events occur.
 
 ## Exercise 10
 
