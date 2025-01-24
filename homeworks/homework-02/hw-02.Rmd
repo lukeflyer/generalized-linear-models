@@ -85,7 +85,7 @@ d.  Plot a histogram of these beta-binomial observations.
 
 Compare the histograms of the "plain old" binomial and beta-binomial distributions. How do their shapes, standard deviations, means, possible values, etc. compare?
 
-```{r}
+```{r, message = F, warning = F}
 
 library(tidyverse)
 library(tidymodels)
