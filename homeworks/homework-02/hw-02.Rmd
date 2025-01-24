@@ -85,6 +85,24 @@ d.  Plot a histogram of these beta-binomial observations.
 
 Compare the histograms of the "plain old" binomial and beta-binomial distributions. How do their shapes, standard deviations, means, possible values, etc. compare?
 
+```{r}
+
+library(tidyverse)
+library(tidymodels)
+library(knitr)
+
+binom <- rbinom(n = 1000, size = 10, prob = 0.8)
+
+hist(binom, 
+     main = "Histogram of Binomial Distribution (n = 10, p = 0.8)", 
+     xlab = "Number of Successes", 
+     ylab = "Frequency", 
+     col = "lightblue", 
+     border = "black", 
+     breaks = seq(-0.5, 10.5, by = 1)
+     )
+```
+
 # Grading
 
 | **Total**             | **33** |
