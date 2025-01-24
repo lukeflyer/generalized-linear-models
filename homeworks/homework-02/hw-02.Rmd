@@ -91,6 +91,8 @@ library(tidyverse)
 library(tidymodels)
 library(knitr)
 
+set.seed(3)
+
 binom <- rbinom(n = 1000, size = 10, prob = 0.8)
 
 hist(binom, 
@@ -102,6 +104,35 @@ hist(binom,
      breaks = seq(-0.5, 10.5, by = 1)
      )
 ```
+
+```{r}
+
+y <- numeric(length = 1000)
+for (i in 1:1000) {
+  p_i <- rbeta(1,4,1)
+  y[i] = rbinom(1,10,p_i)
+}
+
+hist(y, 
+     main = "Histogram of Beta-Binomial Distribution (n = 10, p = pi)",
+     xlab = "Number of Successes", 
+     ylab = "Frequency", 
+     col = "lightblue", 
+     border = "black", 
+     breaks = seq(-0.5, 10.5, by = 1))
+```
+
+```{r}
+
+mean(binom)
+sd(binom)
+mean(y)
+sd(y)
+```
+
+Comparing the histograms, the first thing I notice is that they are both skewed left. The binomial distribution peaks around 8, where the beta-binomial peaks at 10, and has a staircase shape. The shapes are also different in that the beta-binomial distribution has a longer left tail, with values represented all from 0-10, where the binomial distribution only stretches to 3.
+
+While the means are very similar, the standard deviation of the beta-binomial is fairly larger, evidenced by the spread of the historgrams. In terms of possible values, they both have possible values 0-10, but of course we can only see the full spread of values in the beta-binomial distribution. This seems to be because for some lower values of $p_i$ taken from the beta distribution, it will be more likely that there would be fewer successes than when the p is fixed at 0.8.
 
 # Grading
 
