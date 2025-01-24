@@ -1,6 +1,6 @@
 ---
 title: 'Exploring Distributions'
-author: "STA 310: Homework 2"
+author: "STA 310: Homework 2, Luke Flyer"
 output: pdf_document
 ---
 
