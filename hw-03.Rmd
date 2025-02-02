@@ -42,6 +42,57 @@ $$
 
 Derive using calculus based methods the MLE of $\lambda$ is $\sum_i x_i/n$ (sample mean) and show that it is in fact a maximum.
 
+First, start by getting the log-likelihood:
+
+$$\ell(\lambda) = \log L(\lambda) = \log \left( \prod_{i=1}^{n} \frac{\lambda^{x_i} e^{-\lambda}}{x_i!} \right)
+$$
+
+$$
+\ell(\lambda) = \sum_{i=1}^{n} \log \left( \frac{\lambda^{x_i} e^{-\lambda}}{x_i!} \right)
+$$
+
+$$
+\ell(\lambda) = \sum_{i=1}^{n} \left( x_i \log \lambda - \lambda - \log(x_i!) \right)
+$$
+
+Since we will be deriving with respect to $\lambda$, we can ignore the $- log(x_i!)$ term.
+
+$$
+\ell(\lambda) = \sum_{i=1}^{n} \left( x_i \log \lambda - \lambda \right)
+$$
+
+Next, we take the derivative and set it equal to zero to find maximum:
+
+$$
+\frac{d}{d\lambda} \ell(\lambda) = \sum_{i=1}^{n} \frac{x_i}{\lambda} - n
+$$
+
+$$
+\sum_{i=1}^{n} \frac{x_i}{\lambda} - n = 0
+$$
+
+$$
+\frac{1}{\lambda} \sum_{i=1}^{n} x_i = n
+$$
+
+$$
+\lambda = \frac{1}{n} \sum_{i=1}^{n} x_i
+$$
+
+This has shown us that the maximum likelihood estimate for $\lambda$ is the sample mean:
+
+$$
+\hat{\lambda} = \frac{1}{n} \sum_{i=1}^{n} x_i
+$$
+
+To verify that this is a maximum, we can take the second derivative:
+
+$$
+\frac{d^2}{d\lambda^2} \ell(\lambda) = -\sum_{i=1}^{n} \frac{x_i}{\lambda^2}
+$$
+
+Since $\lambda$ will always be \> 0, this second derivative will always be negative, meaning that the MLE is, in fact, a maximum.
+
 ## Exercise 3
 
 Verify using a grid-search that your solution matches to the calculus based one, where you may assume for simplicity that $\sum_i x_i = 500.$ You may assume 100 observations. (Hint: show that the approximated MLE is 5.)
