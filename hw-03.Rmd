@@ -97,6 +97,25 @@ Since $\lambda$ will always be \> 0, this second derivative will always be negat
 
 Verify using a grid-search that your solution matches to the calculus based one, where you may assume for simplicity that $\sum_i x_i = 500.$ You may assume 100 observations. (Hint: show that the approximated MLE is 5.)
 
+```{r}
+
+poisson_lik_log <- function(lambda) {
+  x_sum <- 500
+  n <- 100
+  log_likelihood <- x_sum * log(lambda) - n * lambda  
+  return(log_likelihood)
+}
+
+nGrid = 1000
+lambda_vals <- seq(0, 10, length = nGrid)
+log_likelihood_vals <- sapply(lambda_vals, poisson_lik_log)
+
+lambda_vals[log_likelihood_vals == max(log_likelihood_vals)]
+
+```
+
+This grid-search using the log-likelihood has returned a MLE of approximately 5, which aligns with our calculus-based solution that the MLE is the sample mean (in this case, we get 500/100 = 5).
+
 ## Exercise 4 (Derived from Chapter 2 of BMLR).
 
 **The hot hand in basketball.** @Gilovich1985 wrote a controversial but compelling article claiming that there is no such thing as “the hot hand” in basketball. That is, there is no empirical evidence that shooters have stretches where they are more likely to make consecutive shots, and basketball shots are essentially independent events. One of the many ways they tested for evidence of a “hot hand” was to record sequences of shots for players under game conditions and determine if players are more likely to make shots after made baskets than after misses. For instance, assume we recorded data from one player's first 5 three-point attempts over a 5-game period. We can assume games are independent, but we’ll consider two models for shots within a game:
@@ -109,15 +128,29 @@ a.  Fill out Table \@ref(tab:hothandchp2)---write out the contribution of each g
 
 b.  Given that, for the No Hot Hand model, $\textrm{Lik}(p_B)=p_B^{10}(1-p_B)^{15}$ for the 5 games where we collected data, how do we know that 0.40 (the maximum likelihood estimator (MLE) of $p_B$) is a better estimate than, say, 0.30?
 
+    We can justify this by plugging in 0.40 and 0.30 into the likelihood function, and seeing which gives us a greater likelihood of observing the data from these 5 games:
+
+    ```{r}
+
+    Lik_0.40 <- (0.40)^10 * (1-0.40)^15
+    Lik_0.30 <- (0.30)^10 * (1-0.30)^15
+
+    Lik_0.40
+    Lik_0.30
+    ```
+
+    As we can see, the likelihood is greater (therefore a better estimate) for 0.40 than for 0.30.
+
 c.  Find the MLEs for the parameters in each model, and then use those MLEs to determine if there's significant evidence that the hot hand exists using a likelihood ratio test (LRT). Be sure to specify the test and provide all details of your approach, including reproducible code used.
 
-| Game | First five shots | Likelihood (no hot hand) | Likelihood (hot hand) |
-|------|------------------|--------------------------|-----------------------|
-| 1    | BMMBB            |                          |                       |
-| 2    | MBMBM            |                          |                       |
-| 3    | MMBBB            |                          |                       |
-| 4    | BMMMB            |                          |                       |
-| 5    | MMMMM            |                          |                       |
+| Game | First five shots | Likelihood (no hot hand) | Likelihood (hot hand)                           |
+|---------------|---------------|----------------------|--------------------|
+| 1    | BMMBB            | $p_B^{3}(1-p_B)^{2}$     | $p_B^{2}(1-p_B)p_{B|B}(1-p_{B|B})$              |
+| 2    | MBMBM            | $p_B^{2}(1-p_B)^{3}$     | $p_B^{2}(1-p_B)(1-p_{B|B})^{2}$                 |
+| 3    | MMBBB            | $p_B^{3}(1-p_B)^{2}$     | $p_B(1-p_B)^{2}p_{B|B}^{2}$                     |
+| 4    | BMMMB            | $p_B^{2}(1-p_B)^{3}$     | $p_B^{2}(1-p_B)^{2}(1-p_{B|B})$                 |
+| 5    | MMMMM            | $(1-p_B)^{5}$            | $(1-p_B)^{5}$                                   |
+|      | TOTAL LIKELIHOOD | $p_B^{10}(1-p_B)^{15}$   | $p_B^{7}(1-p_B)^{11}p_{B|B}^{3}(1-p_{B|B})^{4}$ |
 
 # Grading
 
