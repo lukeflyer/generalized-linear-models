@@ -1,6 +1,6 @@
 ---
 title: 'Review of Likelihoods'
-author: "STA 310: Homework 3"
+author: "STA 310: Homework 3, Luke Flyer"
 output: pdf_document
 ---
 
@@ -139,12 +139,149 @@ b.  Given that, for the No Hot Hand model, $\textrm{Lik}(p_B)=p_B^{10}(1-p_B)^{1
     Lik_0.30
     ```
 
-    As we can see, the likelihood is greater (therefore a better estimate) for 0.40 than for 0.30.
+    As we can see, the likelihood is greater (therefore a better estimate) for 0.40 as the estimate than for 0.30.
 
 c.  Find the MLEs for the parameters in each model, and then use those MLEs to determine if there's significant evidence that the hot hand exists using a likelihood ratio test (LRT). Be sure to specify the test and provide all details of your approach, including reproducible code used.
 
+    Model 1 (unconditional): $p_B$ (probability of a make)
+
+    Model 2 (conditional): $p_B$ (probability of make after miss or first basket of game), $p_{B|B}$ (probability of a make after a make)
+
+    Model 1 is nested in Model 2. The parameters of Model 2 ($p_B$, $p_{B|B}$) can be set equal to $p_B$ (from Model 1) to get Model 1. Knowing this, we can generate the following hypothesis test:
+
+    $H_0$: $p_B$ (conditional) = $p_{B|B}$ (conditional) = $p_B$ (unconditional)
+
+    $H_a$: At least of $p_B$, $p_{B|B}$ differs from the others
+
+    Next, we will find the MLEs for each parameter in each model:
+
+    Model 1:
+
+    $$
+    \log \mathcal{L}(p_B) = \log \left( p_B^{10} (1 - p_B)^{15} \right)
+    $$
+
+    $$
+    \ell(p_B) = 10 \log(p_B) + 15 \log(1 - p_B)
+    $$
+
+    $$
+    \frac{d}{dp_B} \ell(p_B) = \frac{d}{dp_B} \left( 10 \log(p_B) + 15 \log(1 - p_B) \right)
+    $$
+
+    $$
+    \frac{d}{dp_B} \ell(p_B) = \frac{10}{p_B} - \frac{15}{1 - p_B}
+    $$
+
+    $$
+    \frac{10}{p_B} - \frac{15}{1 - p_B} = 0
+    $$
+
+    $$
+    p_B = \frac{10}{25} = \frac{2}{5}
+    $$
+
+    To confirm the critical point as a maximum, check second derivative:
+
+    $$
+    \frac{d^2}{dp_B^2} \ell(p_B) = -\frac{10}{p_B^2} - \frac{15}{(1 - p_B)^2}
+    $$
+
+    This will be negative when $p_B = 0.4$, so this confirms a maximum.
+
+    Model 2:
+
+    $$
+    \log \mathcal{L}(p_B, p_{B|B}) = \log \left( p_B^{7} (1 - p_B)^{11} p_{B|B}^{3} (1 - p_{B|B})^{4} \right)
+    $$
+
+    $$
+    \ell(p_B, p_{B|B}) = 7 \log(p_B) + 11 \log(1 - p_B) + 3 \log(p_{B|B}) + 4 \log(1 - p_{B|B})
+    $$
+
+    We now have to take partial derivatives with respect to both $p_B$ and $p_{B|B}$:
+
+    $$
+    \frac{\partial}{\partial p_B} \ell(p_B, p_{B|B}) = \frac{7}{p_B} - \frac{11}{1 - p_B}
+    $$
+
+    $$
+    \frac{\partial}{\partial p_{B|B}} \ell(p_B, p_{B|B}) = \frac{3}{p_{B|B}} - \frac{4}{1 - p_{B|B}}
+    $$
+
+    Now we can set both equal to zero to find the critical points:
+
+    $$
+    \frac{7}{p_B} - \frac{11}{1 - p_B} = 0
+    $$
+
+    $$
+    \frac{3}{p_{B|B}} - \frac{4}{1 - p_{B|B}} = 0
+    $$
+
+    Now we can solve for the MLE of each parameter:
+
+    $$
+    p_B = \frac{7}{18}
+    $$
+
+    $$
+    p_{B|B} = \frac{3}{7}
+    $$
+
+    We now take the second derivatives to test these critical points as maxima:
+
+    $$
+    \frac{\partial^2}{\partial p_B^2} \ell(p_B, p_{B|B}) = -\frac{7}{p_B^2} - \frac{11}{(1 - p_B)^2}
+    $$
+
+    $$
+    \frac{\partial^2}{\partial p_{B|B}^2} \ell(p_B, p_{B|B}) = -\frac{3}{p_{B|B}^2} - \frac{4}{(1 - p_{B|B})^2}
+    $$
+
+    Plugging in the critical points, both second derivatives are negative, confirming these points as maxima.
+
+    Now that we have the MLEs for all parameters in both models, we can plug them back into log-likelihood functions to output the maximum log-likelihoods for each model and find the difference between these two likelihoods:
+
+    ```{r}
+
+    model1_lik <- function(pb) {
+    10*log(pb) + 15*log(1 - pb)
+    }
+    model1_lik(10/25)
+    ```
+
+    ```{r}
+
+    model2_lik <- function(pb, pbb) {
+    7*log(pb) + 11*log(1 - pb) + 3*log(pbb) + 4*log(1 - pbb)
+    }
+
+    model2_lik(7/18, 3/7)
+    ```
+
+    ```{r}
+
+    diff <- model2_lik(7/18, 3/7) - model1_lik(10/25)
+    diff
+    ```
+
+    Next, we will run a likelihood ratio test (LRT) to determine whether or not this difference between the two models is significant (whether or not to reject our null hypothesis):
+
+    ```{r}
+
+    LRT <- 2 * diff
+    pchisq(LRT, 1, lower.tail = FALSE)
+    ```
+
+    p-value = 0.8560131
+
+    The p-value is very large, so we fail to reject $H_0$. We do not have convincing evidence that the conditional model (using conditional $p_B$ and $p_{B|B}$) is an improvement over the unconditional model (only unconditional $p_B$).
+
+d.  Table from Question 4.a
+
 | Game | First five shots | Likelihood (no hot hand) | Likelihood (hot hand)                           |
-|---------------|---------------|----------------------|--------------------|
+|------|------------------|--------------------------|-------------------------------------------------|
 | 1    | BMMBB            | $p_B^{3}(1-p_B)^{2}$     | $p_B^{2}(1-p_B)p_{B|B}(1-p_{B|B})$              |
 | 2    | MBMBM            | $p_B^{2}(1-p_B)^{3}$     | $p_B^{2}(1-p_B)(1-p_{B|B})^{2}$                 |
 | 3    | MMBBB            | $p_B^{3}(1-p_B)^{2}$     | $p_B(1-p_B)^{2}p_{B|B}^{2}$                     |
