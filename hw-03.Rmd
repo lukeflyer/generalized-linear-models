@@ -38,6 +38,12 @@ $$
 L(\lambda) = \prod_{i=1}^{n} \frac{\lambda^{x_i} e^{-\lambda}}{x_i!}
 $$
 
+Can be simplified to:
+
+$$
+L(\lambda) = \left( \prod_{i=1}^n \frac{1}{x_i!} \right) \lambda^{\sum_{i=1}^n x_i} e^{-n\lambda}
+$$
+
 ## Exercise 2
 
 Derive using calculus based methods the MLE of $\lambda$ is $\sum_i x_i/n$ (sample mean) and show that it is in fact a maximum.
@@ -281,7 +287,7 @@ c.  Find the MLEs for the parameters in each model, and then use those MLEs to d
 d.  Table from Question 4.a
 
 | Game | First five shots | Likelihood (no hot hand) | Likelihood (hot hand)                           |
-|------|------------------|--------------------------|-------------------------------------------------|
+|---------------|---------------|---------------|--------------------------|
 | 1    | BMMBB            | $p_B^{3}(1-p_B)^{2}$     | $p_B^{2}(1-p_B)p_{B|B}(1-p_{B|B})$              |
 | 2    | MBMBM            | $p_B^{2}(1-p_B)^{3}$     | $p_B^{2}(1-p_B)(1-p_{B|B})^{2}$                 |
 | 3    | MMBBB            | $p_B^{3}(1-p_B)^{2}$     | $p_B(1-p_B)^{2}p_{B|B}^{2}$                     |
