@@ -1,0 +1,5 @@
+---
+title: 'Quiz 1'
+author: "Luke Flyer"
+output: pdf_document
+---
