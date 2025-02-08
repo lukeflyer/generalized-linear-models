@@ -3,3 +3,125 @@ title: 'Quiz 1'
 author: "Luke Flyer"
 output: pdf_document
 ---
+
+## Question 1
+
+Which member of the teaching team has office hours Tuesdays 10:30 - 11:30am?
+
+According to the syllabus, there are no members of the teaching team who have office hours during that time.
+
+## Question 2
+
+If you have a question about the course content, how should you ask it? Select all that apply. a. Ask in office hours b. Post in Slack c. Ask in Slack
+
+As we do no use Slack for this course, "Ask in office hours" seems to be the only applicable option.
+
+## Question 3
+
+If a homework assignment is due on Wednesday at 11:59pm, when is the latest it can be turned in for credit?
+
+There are no extensions on any assignments, so the latest it can be turned in for credit is 11:59pm on Wednesday.
+
+## Question 4
+
+The course policy on the use of artificial intelligence is based on two guiding principles: (1) Cognitive dimension and (2) Ethical dimension. Briefly describe what each dimension means.
+
+Cognitive dimension: AI should only be used as a tool to facilitate learning, not take the place of it. It should not reduce the ability to think clearly. Ethical dimension: Use of AI should be transparent (explicitly cited) and only be used for code and not narrative.
+
+## Question 5
+
+Suppose data from 100 randomly selected elementary school students are used to fit a regression model to predict height (in inches) based on age (in months). Which of the following best describes the normality assumption for this model?
+
+Height (in inches) is normally distributed at any given age (in months).
+
+## Question 6
+
+Let 𝑌 ∼ Binomial(𝑛, 𝜃). Write the likelihood of the Binomial distribution and define it to be 𝐿(𝜃), where 𝑛 is known and 𝜃 is unknown.
+
+$$
+L(\theta) = \prod_{i=1}^{m} P(Y_i = r_i | n, \theta)
+$$
+
+where $r_i$ is the number of successes in the i-th observation. From the PMF of Y, we can then say each observation will have the distribution:
+
+$$
+\binom{n}{r_i} \theta^{r_i} (1 - \theta)^{n - r_i}
+$$
+
+Plugging this back into the likelihood formula, we get:
+
+$$
+L(\theta) = \prod_{i=1}^{m} \binom{n}{r_i} \theta^{r_i} (1 - \theta)^{n - r_i}
+$$
+
+## Question 7
+
+Simplifying the likelihood function, we get
+
+$$
+L(\theta) = \left( \prod_{i=1}^{m} \binom{n}{r_i} \right) \theta^{\sum_{i=1}^{m} r_i} (1 - \theta)^{\sum_{i=1}^{m} (n - r_i)}
+$$
+
+Taking the natural log of the function, we get the following:
+
+$$
+\ell(\theta) = \log L(\theta) = \log \left( \left( \prod_{i=1}^{m} \binom{n}{r_i} \right) \theta^{\sum_{i=1}^{m} r_i} (1 - \theta)^{\sum_{i=1}^{m} (n - r_i)} \right)
+$$
+
+$$
+\ell(\theta) = \log \left( \prod_{i=1}^{m} \binom{n}{r_i} \right) + \sum_{i=1}^{m} r_i \log(\theta) + \sum_{i=1}^{m} (n - r_i) \log(1 - \theta)
+$$
+
+The first term does not depend on $\theta$, so we can ignore it when taking derivative, giving us the following:
+
+$$
+\ell(\theta) = \sum_{i=1}^{m} r_i \log(\theta) + \sum_{i=1}^{m} (n - r_i) \log(1 - \theta)
+$$
+
+$$
+\frac{d\ell(\theta)}{d\theta} = \frac{\sum_{i=1}^{m} r_i}{\theta} - \frac{\sum_{i=1}^{m} (n - r_i)}{1 - \theta}
+$$
+
+We can now set the derivative equal to 0 and solve for $\theta$:
+
+$$
+\frac{\sum_{i=1}^{m} r_i}{\theta} - \frac{\sum_{i=1}^{m} (n - r_i)}{1 - \theta} = 0
+$$
+
+$$
+\left( \sum_{i=1}^{m} r_i \right) (1 - \theta) = \left( \sum_{i=1}^{m} (n - r_i) \right) \theta
+$$
+
+$$
+\sum_{i=1}^{m} r_i - \sum_{i=1}^{m} r_i \theta = \sum_{i=1}^{m} (n - r_i) \theta
+$$
+
+$$
+\sum_{i=1}^{m} r_i = \theta \left( \sum_{i=1}^{m} r_i + \sum_{i=1}^{m} (n - r_i) \right)
+$$
+
+$$
+\sum_{i=1}^{m} r_i = \theta \left( \sum_{i=1}^{m} r_i + m n - \sum_{i=1}^{m} r_i \right)
+$$
+
+$$
+\sum_{i=1}^{m} r_i = \theta \cdot m n
+$$
+
+$$
+\hat{\theta}_{MLE} = \frac{\sum_{i=1}^{m} r_i}{m n}
+$$
+
+Now, we must test the second derivative to confirm the critical point as a maximum:
+
+$$
+\frac{d^2 \ell(\theta)}{d\theta^2} = -\frac{\sum_{i=1}^{m} r_i}{\theta^2} - \frac{\sum_{i=1}^{m} (n - r_i)}{(1 - \theta)^2}
+$$
+
+For all $\theta$ between 0 and 1, this second derivative will be negative, confirming the above critical point as a maximum. In words, this MLE is equal to the sample proportion of successes, with the total number of successes in the numerator and the total number of trials in the denominator.
+
+## Question 8
+
+## Question 9
+
+## Question 10
