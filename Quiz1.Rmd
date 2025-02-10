@@ -21,7 +21,7 @@ According to the syllabus, there are no members of the teaching team who have of
 
 If you have a question about the course content, how should you ask it? Select all that apply. a. Ask in office hours b. Post in Slack c. Ask in Slack
 
-As we do no use Slack for this course, "Ask in office hours" seems to be the only applicable option.
+As we do no use Slack for this course, "Ask in office hours" seems to be the only applicable option. We also use Ed Discussion in this course, but this was not one of the possible answer choices.
 
 ## Question 3
 
@@ -33,7 +33,9 @@ There are no extensions on any assignments, so the latest it can be turned in fo
 
 The course policy on the use of artificial intelligence is based on two guiding principles: (1) Cognitive dimension and (2) Ethical dimension. Briefly describe what each dimension means.
 
-Cognitive dimension: AI should only be used as a tool to facilitate learning, not take the place of it. It should not reduce the ability to think clearly. Ethical dimension: Use of AI should be transparent (explicitly cited) and only be used for code and not narrative.
+Cognitive dimension: AI should only be used as a tool to facilitate learning, not take the place of it. It should not reduce the ability to think clearly.
+
+Ethical dimension: Use of AI should be transparent (explicitly cited) and only be used for code and not narrative.
 
 ## Question 5
 
@@ -49,7 +51,7 @@ $$
 L(\theta) = \prod_{i=1}^{m} P(Y_i = r_i | n, \theta)
 $$
 
-where $r_i$ is the number of successes in the i-th observation. From the PMF of Y, we can then say each observation will have the distribution:
+where $r_i$ is the number of successes (in $n$ trials) in the i-th observation (there are $m$ total observations). From the PMF of Y, we can then say each observation will have the distribution:
 
 $$
 \binom{n}{r_i} \theta^{r_i} (1 - \theta)^{n - r_i}
@@ -62,6 +64,8 @@ L(\theta) = \prod_{i=1}^{m} \binom{n}{r_i} \theta^{r_i} (1 - \theta)^{n - r_i}
 $$
 
 ## Question 6b
+
+Assume the information from question 6. Derive using calculus the maximum likelihood estimator of 𝜃, called ̂ 𝜃MLE. Show all steps/derivations for full credit.
 
 Simplifying the likelihood function, we get
 
@@ -125,13 +129,13 @@ $$
 \frac{d^2 \ell(\theta)}{d\theta^2} = -\frac{\sum_{i=1}^{m} r_i}{\theta^2} - \frac{\sum_{i=1}^{m} (n - r_i)}{(1 - \theta)^2}
 $$
 
-For all $\theta$ between 0 and 1, this second derivative will be negative, confirming the above critical point as a maximum. In words, this MLE is equal to the sample proportion of successes, with the total number of successes in the numerator and the total number of trials in the denominator.
+For all $\theta$ between 0 and 1, this second derivative will be negative, confirming the above critical point as a maximum. In words, this MLE is equal to the sample proportion of successes, with the total number of successes in the numerator and the total number of trials (from all observations) in the denominator. This result seems to align with intuition.
 
 ## Question 7
 
 Provide the three assumptions of a generalized linear model that may deviate from a linear model. State the one assumption they share in common.
 
-Assumptions that deviate from a linear model:
+Assumptions of a GLM that deviate from a linear model:
 
 1.  Linearity: the relationship between the response variable and the predictor variable(s) can be non-linear. So far, we have seen how this can be useful for situations like Poisson regression, where there is not a strictly linear relationship.
 2.  Normality: The response variable can be non-normal when using a GLM. Again this is useful in situations like Poisson regression, where the response variable will not follow a normal distribution.
@@ -151,7 +155,7 @@ Before fitting any models, it is important to understand our data, specifically 
 
 Define the maximum likelihood estimator. Is it always optimal or the best estimator that we should consider; explain.
 
-The maximum likelihood estimate is the value of a parameter (among all possible values of the parameter) at which we are most likely to observe the data. Mathematically, the MLE is the value of $\theta$ that maximizes the likelihood function $L(\theta)$ within its domain. Though MLEs are intuitively the "best" estimator to consider and quite often technically the best as well, they are not always optimal. The desirable charactaristics of an MLE tend to hold when the sample size is large enough. As the sample size increases, MLEs converge to the true paramter value and they become increasingly more normal. Without a large enough sample size, however, MLEs can prove to be biased or unreliable. Bootstrapping or Bayesian methods are possible alternatives to MLE when the conditions aren't met, but MLE is still highly and commonly useful.
+The maximum likelihood estimate is the value of a parameter (among all possible values of the parameter) at which we are most likely to observe a set of data. Mathematically, the MLE is the value of $\theta$ that maximizes the likelihood function $L(\theta)$ within its domain. Though MLEs may seem intuitively to be the "best" estimator to consider, they are not always optimal. The desirable charactaristics of an MLE tend to hold when the sample size is large enough. As the sample size increases, MLEs converge to the true paramter value and they become increasingly more normal. Without a large enough sample size, however, MLEs can prove to be biased or unreliable. Bootstrapping or Bayesian methods are possible alternatives to MLE when the conditions and assumptions aren't met, but MLE is still highly and frequently useful.
 
 ## Question 10
 
@@ -159,4 +163,4 @@ Define a likelihood using words (and without notation). Can we make probability 
 
 Likelihoods are measures of how likely we are to observe a given set of data for a specific parameter (or set of parameters). Essentially, we are given some observed data, we have some estimate for the parameters in a model, and a likelihood will tell us how likely we are to observe that data for those parameter estimates.
 
-We cannot make probability statements regarding the likelihood in the strict sense that we tend to use probability statements. A likelihood function inputs a parameter value and outputs a li kelihood of seeing the observed data at that parameter value. A probability function inputs observed data and outputs the probability of observing that outcome. This difference is subtle, but important. Another important difference is that probability distributions (whether discrete or continuous) will sum or integrate to 1, but this is not the case with likelihoods. This difference has the implication that we cannot make any statements involving "chance" since likelihood functions can only compare likelihoods (not outcomes) of parameter values, whereas probability functions can compare specific probabilities of outcomes against each other.
+We cannot make probability statements regarding the likelihood in the strict sense that we tend to use probability statements. A likelihood function inputs a parameter value and outputs the likelihood of seeing the observed data at that parameter value. A probability function inputs an outcome and outputs the probability of observing that outcome. This difference is subtle, but important. Another important difference is that probability distributions (whether discrete or continuous) will sum or integrate to 1, but this is not the case with likelihood distributions. This difference has the implication that we cannot make any statements involving "chance" with likelihoods, since likelihood functions can only compare likelihoods (not outcomes) of parameter values, whereas probability functions can compare specific probabilities of outcomes against each other.
