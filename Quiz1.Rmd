@@ -4,6 +4,13 @@ author: "Luke Flyer"
 output: pdf_document
 ---
 
+```{r}
+
+library(knitr)
+library(magrittr)
+library(kableExtra)
+```
+
 ## Question 1
 
 Which member of the teaching team has office hours Tuesdays 10:30 - 11:30am?
@@ -34,7 +41,7 @@ Suppose data from 100 randomly selected elementary school students are used to f
 
 Height (in inches) is normally distributed at any given age (in months).
 
-## Question 6
+## Question 6a
 
 Let 𝑌 ∼ Binomial(𝑛, 𝜃). Write the likelihood of the Binomial distribution and define it to be 𝐿(𝜃), where 𝑛 is known and 𝜃 is unknown.
 
@@ -54,7 +61,7 @@ $$
 L(\theta) = \prod_{i=1}^{m} \binom{n}{r_i} \theta^{r_i} (1 - \theta)^{n - r_i}
 $$
 
-## Question 7
+## Question 6b
 
 Simplifying the likelihood function, we get
 
@@ -120,8 +127,36 @@ $$
 
 For all $\theta$ between 0 and 1, this second derivative will be negative, confirming the above critical point as a maximum. In words, this MLE is equal to the sample proportion of successes, with the total number of successes in the numerator and the total number of trials in the denominator.
 
+## Question 7
+
+Provide the three assumptions of a generalized linear model that may deviate from a linear model. State the one assumption they share in common.
+
+Assumptions that deviate from a linear model:
+
+1.  Linearity: the relationship between the response variable and the predictor variable(s) can be non-linear. So far, we have seen how this can be useful for situations like Poisson regression, where there is not a strictly linear relationship.
+2.  Normality: The response variable can be non-normal when using a GLM. Again this is useful in situations like Poisson regression, where the response variable will not follow a normal distribution.
+3.  Constant variance: Variance in the response variable is allowed to differ at different levels of the predictor. This allows GLMs to handle various situations where the variance in the outcome will not be constant along the predictor variables.
+
+Assumption in common:
+
+1.  Independence: Each observation in both a GLM and a linear model must be independent. Knowing the distance from the regression line for one point should not provide any information about another.
+
 ## Question 8
+
+Describe, in your own words, the importance of exploratory data analysis (in less than two sentences).
+
+Before fitting any models, it is important to understand our data, specifically focusing on the distributions of our variables and the relationships between the variables. Visualizing, graphically and numerically, the variables and their correlations will help us decide appropriate modeling techniques to use.
 
 ## Question 9
 
+Define the maximum likelihood estimator. Is it always optimal or the best estimator that we should consider; explain.
+
+The maximum likelihood estimate is the value of a parameter (among all possible values of the parameter) at which we are most likely to observe the data. Mathematically, the MLE is the value of $\theta$ that maximizes the likelihood function $L(\theta)$ within its domain. Though MLEs are intuitively the "best" estimator to consider and quite often technically the best as well, they are not always optimal. The desirable charactaristics of an MLE tend to hold when the sample size is large enough. As the sample size increases, MLEs converge to the true paramter value and they become increasingly more normal. Without a large enough sample size, however, MLEs can prove to be biased or unreliable. Bootstrapping or Bayesian methods are possible alternatives to MLE when the conditions aren't met, but MLE is still highly and commonly useful.
+
 ## Question 10
+
+Define a likelihood using words (and without notation). Can we make probability statements regarding the likelihood? Explain.
+
+Likelihoods are measures of how likely we are to observe a given set of data for a specific parameter (or set of parameters). Essentially, we are given some observed data, we have some estimate for the parameters in a model, and a likelihood will tell us how likely we are to observe that data for those parameter estimates.
+
+We cannot make probability statements regarding the likelihood in the strict sense that we tend to use probability statements. A likelihood function inputs a parameter value and outputs a li kelihood of seeing the observed data at that parameter value. A probability function inputs observed data and outputs the probability of observing that outcome. This difference is subtle, but important. Another important difference is that probability distributions (whether discrete or continuous) will sum or integrate to 1, but this is not the case with likelihoods. This difference has the implication that we cannot make any statements involving "chance" since likelihood functions can only compare likelihoods (not outcomes) of parameter values, whereas probability functions can compare specific probabilities of outcomes against each other.
