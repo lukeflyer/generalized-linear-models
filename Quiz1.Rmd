@@ -2,7 +2,6 @@
 title: 'Quiz 1'
 author: "Luke Flyer"
 output: pdf_document
-latex_engine: xelatex
 ---
 
 ```{r}
@@ -46,7 +45,7 @@ Height (in inches) is normally distributed at any given age (in months).
 
 ## Question 6a
 
-Let 𝑌 ∼ Binomial(𝑛, 𝜃). Write the likelihood of the Binomial distribution and define it to be 𝐿(𝜃), where 𝑛 is known and 𝜃 is unknown.
+Let Y \~ Binomial(n, $\theta$). Write the likelihood of the Binomial distribution and define it to be $L(\theta)$, where n is known and $\theta$ is unknown.
 
 $$
 L(\theta) = \prod_{i=1}^{m} P(Y_i = r_i | n, \theta)
@@ -66,7 +65,7 @@ $$
 
 ## Question 6b
 
-Assume the information from question 6. Derive using calculus the maximum likelihood estimator of 𝜃, called ̂ 𝜃MLE. Show all steps/derivations for full credit.
+Assume the information from question 6. Derive using calculus the maximum likelihood estimator of $\theta$, called $\hat\theta_{MLE}$. Show all steps/derivations for full credit.
 
 Simplifying the likelihood function, we get
 
