@@ -65,9 +65,49 @@ Make sure to convert Spine and Color to the appropriate data types in R before d
 
 a.  Create a histogram of Satellite. Is there preliminary evidence the number of satellites could be modeled as a Poisson response? Briefly explain.
 
+    ```{r}
+
+    library(knitr)
+    library(magrittr)
+    library(kableExtra)
+
+    crabs <- read.csv("crab.csv")
+
+    ggplot(crabs, aes(x = Satellite)) +
+      geom_histogram(binwidth = 1, fill = "lightblue", color = "black") +
+      labs(
+        title = "Histogram of Satellite Counts", 
+        x = "Number of Satellites", 
+        y = "Frequency") +
+      theme_minimal()
+    ```
+
+    From this histogram, it seems like there is an overabundance of zeros. Therefore, it is more likely that a zero-inflated model would be useful rather than a regular Poisson response. The data is right skewed, which follows the general pattern of a Poisson distribution, but the large amount of zeros is definitely evidence against a strictly Poisson model.
+
 b.  Fit a Poisson regression model including Width, Weight, and Spine as predictors. Display the model with the 95% confidence interval for each coefficient.
 
+    ```{r}
+
+    crabs$Spine <- as.factor(crabs$Spine)
+    crabs$Color <- as.factor(crabs$Color)
+
+    poisson_crabs <- glm(Satellite ~ Width + Weight + Spine, family = "poisson", data = crabs)
+
+    tidy(poisson_crabs, conf.int = TRUE) |>
+      kable(digits = 4)
+    ```
+
+    ```{r}
+
+    exp(-0.2144)
+    exp(-0.0493)
+    ```
+
 c.  Describe the effect of Spine in terms of the mean number of satellites.
+
+    The mean number of satellites for females with one worn or broken spine is approximately 0.81 times as large as the number of satellites for females with both good spines when controlling for weight and carapace width.
+
+    The mean number of satellites for females with both worn or broken spines is approximately 0.95 times as large as the number of satellites for females with both good spines when controlling for weight and carapace width.
 
 ```{=html}
 <!-- -->
@@ -79,11 +119,44 @@ c.  Describe the effect of Spine in terms of the mean number of satellites.
 ```
 a.  We would like to fit a quasi-Poisson regression model for this data. Briefly explain why we may want to consider fitting a quasi-Poisson regression model for this data.
 
+    ```{r}
+    mean(crabs$Satellite)
+    var(crabs$Satellite)
+    ```
+
+    We want to use a quasi-Poisson regression model for this data because the data has the problem of overdispersion, which means that the variance of satellite count is larger than the mean satellite count. A Poisson model assumes that the mean and variance are equal, so using a quasi-Poisson model is more appropriate here to account for overdispersion using a dispersion parameter.
+
 b.  Fit a quasi-Poisson regression model that corresponds with the model chosen in the previous exercise. Display the model.
+
+    ```{r}
+
+    quasi_poisson_crabs <- glm(Satellite ~ Width + Weight + Spine, family = quasipoisson, data = crabs)
+
+    tidy(quasi_poisson_crabs, conf.int = TRUE) |>
+      kable(digits = 4)
+    ```
 
 c.  What is the estimated dispersion parameter? Show how this value is calculated.
 
+    The estimated dispersion parameter is calculated by dividing the sum of the squared Pearson residuals by the degrees of freedom for the residuals (n - p, where p is the total number of terms in the model). It can be written as follows:
+
+    $$
+    \hat{\phi} = \frac{\sum_{i=1}^{n} (\text{Pearson residuals})^2}{n - p}
+    $$
+
+    ```{r}
+
+    dispersion <- 
+      sum(resid(quasi_poisson_crabs, type = "pearson")^2) / quasi_poisson_crabs$df.residual
+    dispersion
+
+    ```
+
+    For this model, our estimated dispersion parameter is approximately 3.169.
+
 d.  How do the estimated coefficients change compared to the model chosen in the previous exercise? How do the standard errors change?
+
+    The estimated coefficients are almost exactly the same as the model chosen in the previous exercise. The standard errors are a little bit larger in this new quasi-Poisson model compared with the Poisson. This is because this new model accounts for overdispersion, and the standard errors become larger because of the addition of the dispersion parameter.
 
 ```{=html}
 <!-- -->
@@ -95,6 +168,24 @@ Remember to set a seed so your simulations are reproducible!
 <!--BMLR Sec 3.7.2, Ex 2-->
 
 a.  Use the R function rpois() to generate 10,000 $x_i$ from a regular Poisson distribution, $X \sim \textrm{Poisson}(\lambda=1.5)$. Plot a histogram of this distribution and note its mean and variance. Next, let $Y \sim \textrm{Gamma}(r = 3, \lambda = 2)$ and use rgamma() to generate 10,000 random $y_i$ from this distribution.
+
+    ```{r}
+
+    set.seed(7)
+
+    lambda <- 1.5
+    n <- 10000
+    poisson_data <- rpois(n, lambda)
+
+    poisson_df <- data.frame(poisson_data)
+
+    ggplot(poisson_df, aes(x = poisson_data)) +
+      geom_histogram(binwidth = 1, fill = "lightblue", color = "black", alpha = 0.7) +
+      labs(title = "Histogram of Poisson Distribution (lambda = 1.5)", 
+           x = "Value", y = "Frequency") +
+      theme_minimal() +
+      scale_x_continuous(breaks = seq(0, max(poisson_data), by = 1))
+    ```
 
 Now, consider 10,000 different Poisson distributions where $\lambda_i = y_i$. Randomly generate one $z_i$ from each Poisson distribution. Plot a histogram of these $z_i$ and compare it to your original histogram of $X$ (where $X \sim \textrm{Poisson}(1.5)$). How do the means and variances compare?
 
