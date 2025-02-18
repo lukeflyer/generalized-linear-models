@@ -290,7 +290,29 @@ b.  A negative binomial distribution can actually be expressed as a gamma-Poisso
 
     We can see that the histogram for this negative binomial distribution has approximately the same shape and median as the gamma-Poisson mixture. Also, the mean and variance are approximately equal for both distributions (mean = 6, variance = 18).
 
-c.  Make an argument that if you want a $\textrm{NegBinom}(r, p)$ random variable, you can instead sample from a Poisson distribution, where the $\lambda$ values are themselves sampled from a gamma distribution with parameters $r$ and $\lambda' = \frac{p}{1-p}$. You may show equivalency via the simulations or mathematically, however, make sure your arguments are precise and clear.
+c.  Make an argument that if you want a $\textrm{NegBinom}(r, p)$ random variable, you can instead sample from a Poisson distribution, where the $\lambda$ values are themselves sampled from a gamma distribution with parameters $r$ and $\lambda' = \frac{1-p}{p}$. You may show equivalency via the simulations or mathematically, however, make sure your arguments are precise and clear.
+
+    We have just conducted two simulations that outputted approximately equivalent results. In the first simulation, the gamma-Poisson distribution, we drew 10,000 times from this distribution modeled by $Z \sim \textrm{P oisson}(\lambda)$where $\lambda \sim \textrm{Gamma}(r = 3, \lambda' = 2)$. In the second simulation, we drew 10,000 times from a a distribution modeled by $\textrm{NegBinom}(3, \frac{1}{3})$. As we can see, the $\lambda'$ value (= 2) used in the gamma-Poisson distribution is equal to $\frac{1-p}{p}$ where $p = \frac{1}{3}$. We could see when comparing the histograms that the shape of the distributions are equal. The visualization below shows the two histograms overlapped to illustrate the equivalency.
+
+    ```{r}
+
+    df_combined <- data.frame(
+      value = c(df_nb$nb, df_gamma_poisson$poisson_from_gamma),
+      distribution = rep(c("Negative Binomial", "Gamma-Poisson mixture"), 
+                         times = c(nrow(df_nb), nrow(df_gamma_poisson)))
+    )
+
+    ggplot(df_combined, aes(x = value, fill = distribution)) +
+      geom_histogram(binwidth = 1, color = "black", alpha = 0.7, position = "identity") +
+      labs(title = "Overlay of Negative Binomial and Gamma-Poisson Mixture",
+           x = "Value", y = "Frequency") +
+      theme_minimal() +
+      scale_x_continuous(breaks = seq(0, max(df_combined$value), by = 5)) +
+      scale_fill_manual(values = c("lightblue", "lightgreen")) +
+      theme(legend.title = element_blank())
+    ```
+
+    From the descriptive statistics gathered in the previous section, we also found that the means and variances of the two distributions were equal (mean = 6, variance = 18). Through visualization and simulation, we have shown empirically that if you want a $\textrm{NegBinom}(r, p)$ random variable, you can instead sample from a Poisson distribution, where the $\lambda$ values are themselves sampled from a gamma distribution with parameters $r$ and $\lambda' = \frac{1-p}{p}$.
 
 <!-- -->
 
