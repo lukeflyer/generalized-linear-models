@@ -69,6 +69,8 @@ a.  Create a histogram of Satellite. Is there preliminary evidence the number of
     library(knitr)
     library(magrittr)
     library(kableExtra)
+    library(tidyverse)
+    library(tidymodels)
 
     crabs <- read.csv("crab.csv")
 
@@ -336,11 +338,66 @@ We will use the pscl package and the hurdle function in it to analyze a hurdle m
 
 a.  Visualize the distribution of the response variable totalIssuePages. Why might we consider using a hurdle model compared to a Poisson model? Why is a zero-inflated Poisson model not appropriate in this scenario?
 
+    ```{r}
+
+    issues <- read.csv("ambiguity.csv")
+
+    ggplot(issues, aes(x = totalIssuePages)) +
+      geom_histogram(binwidth = 1, fill = "lightblue", color = "black", alpha = 0.7) +
+      labs(title = "Distribution of # of issues candidates commented on",
+           x = "Number of Issues Commented On", y = "Frequency") +
+      theme_minimal() +
+      scale_x_continuous(breaks = seq(0, max(issues$totalIssuePages, na.rm = TRUE), by = 10))
+    ```
+
+    Given the excess of zeros, we should consider using a hurdle model rather than a Poisson model. A hurdle model is more appropriate in this context because we are interested in finding the variables that predict candidate silence (commenting on 0 issues). A hurdle model does this, relating predictors to the log-odds of being a non-zero (i.e., having at least one issue statement). A zero-inflated model would not be appropriate here since it would assume two distinct types of zeros: one type being candidates who always comment on 0 issues and the other type being candidates who, on this occasion, commented on 0 issues. We don't want to have these separate categories, since we are simply interested in the predictors of candidate silence for any reason.
+
 b.  Create a plot of the empirical log odds of having at least one issue statement by ideology. You may want to group ideology values first. What can you conclude from this plot?
+
+    ```{r}
+
+    issues_new <- issues |>
+      filter(!is.na(ideology))
+
+    issues_new$ideologybin <- cut_interval(issues_new$ideology, n = 5)
+
+    log_odds_data <- issues_new |>
+      group_by(ideologybin) |>
+      summarise(
+        prob_one_issue = mean(totalIssuePages > 0, na.rm = TRUE),
+        log_odds = log(prob_one_issue / (1 - prob_one_issue))
+      )
+
+    ggplot(log_odds_data, aes(x = ideologybin, y = log_odds)) +
+      geom_bar(stat = "identity", fill = "lightblue", color = "black", alpha = 0.7) +
+      labs(title = "Empirical Log-Odds of Having at Least One Issue Statement by Ideology",
+           x = "Ideology Bin", y = "Log-Odds") +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+    ```
+
+    From this plot, we can conclude that the empirical log odds of having at least one issue statement is higher among candidates with a ideological orientation that is more towards the right. There appears to be a steady increase in log odds as we move from left-leaning to right-leaning candidates.
 
 c.  Create a hurdle model with ideology and democrat as predictors in both parts. Display the model. Interpret ideology in both parts of the model.
 
+    ```{r}
+
+    library(pscl)
+
+    hurdle_model <- hurdle(totalIssuePages ~ ideology + democrat, data = issues_new, dist = "poisson")
+
+    summary(hurdle_model)
+    ```
+
 d.  Repeat (d), but include an interaction in both parts. Interpret the interaction in the zero hurdle part of the model.
+
+    ```{r}
+
+    hurdle_model_int <- hurdle(totalIssuePages ~ ideology + democrat + ideology * democrat, data = issues_new, dist = "poisson")
+
+    summary(hurdle_model_int)
+    ```
 
 # Grading
 
