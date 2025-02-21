@@ -40,7 +40,7 @@ c.  What does $\lambda$ represent?
 
 d.  Would a zero-inflated model be considered here? If so, what would be a "true zero"?
 
-    It is definitely reasonable for a zero-inflated model to be considered here. It is conceivable that many of the 250 visitors in the sample did not even go fishing, or they were expecting to, but weren't able to actually go fishing. Of course, we would need to view the actual data to see if there was an overabundance of zeros. The "true zeros" here (those that are going to be excluded from the Poisson process) would be those visitors who did not even attempt fishing (or didn't go fishing for some other reason).
+    It is definitely reasonable for a zero-inflated model to be considered here. It is conceivable that many of the 250 visitors in the sample did not even go fishing, or they were expecting to, but weren't able to actually go fishing. Of course, we would need to view the actual data to see if there was an overabundance of zeros. The "true zeros" here (those that are going to be excluded from the Poisson process) would be those visitors who did not even attempt fishing (or didn't go fishing for some other reason). Conceivably, there could also be the presence of the other type of zero, which is just a visitor who went fishing but didn't happen to catch anything, and the ZIP model would treat these accordingly.
 
 <!-- -->
 
@@ -179,7 +179,7 @@ a.  Use the R function rpois() to generate 10,000 $x_i$ from a regular Poisson d
 
     r <- 3
     lambda_gamma <- 2
-    gamma_data <- rgamma(n, shape = r, rate = 1 / lambda_gamma)
+    gamma_data <- rgamma(n, shape = r, rate = lambda_gamma)
 
     ggplot(poisson_df, aes(x = poisson_data)) +
       geom_histogram(binwidth = 1, fill = "lightblue", color = "black", alpha = 0.7) +
@@ -219,7 +219,7 @@ a.  Use the R function rpois() to generate 10,000 $x_i$ from a regular Poisson d
     var(poisson_from_gamma)
     ```
 
-    When comparing the two histograms, we can clearly see that the most common value from the Poisson distribution is 1, where for the gamma-Poisson, it is 3. The other major difference is the length of the right tail. Both distributions are right-skewed, but the gamma-Poisson has a much larger right tail, extending all the way to 32, where the Poisson only extends to 8. We can see these differences clearly through descriptive statistics with the gamma-Poisson having a larger mean and variance (mean = 6, variance = 18) than the Poisson (mean = 1.5, variance = 1.5). It should also be noted that the mean and variance are (approximately) equal for the Poisson but not for the gamma-Poisson.
+    When comparing the two histograms, we can clearly see that the most common value from the Poisson distribution is 1, where for the gamma-Poisson, it is 0. The other major difference is the length of the right tail. Both distributions are right-skewed, but the gamma-Poisson has a much larger right tail, extending all the way to about 11, where the Poisson only extends to 8. We can see these differences clearly through descriptive statistics with the gamma-Poisson having a larger mean and variance (mean = 1.5, variance = 2.3) than the Poisson (mean = 1.5, variance = 1.5). It should also be noted that the mean and variance are (approximately) equal for the Poisson but not for the gamma-Poisson.
 
 b.  A negative binomial distribution can actually be expressed as a gamma-Poisson mixture. In Part a, you looked at a gamma-Poisson mixture $Z \sim \textrm{Poisson}(\lambda)$ where $\lambda \sim \textrm{Gamma}(r = 3, \lambda' = 2)$.
 
@@ -228,40 +228,12 @@ b.  A negative binomial distribution can actually be expressed as a gamma-Poisso
     Set the means equal and solve for r(1-p):
 
     $$
-    \frac{r(1 - p)}{p} = 6
+    \frac{r(1 - p)}{p} = \frac{3}{2}
     $$
 
-    $$
-    r(1 - p) = 6p
-    $$
+    Plugging in r = 3 into the above equation, we get p = 2/3.
 
-    We also know the the variance should be the same, so we will set the variance of a negative binomial distribution equal to the variance of our gamma-Poisson mixture, which was 18:
-
-    $$
-    \frac{r(1 - p)}{p^2} = 18
-    $$
-
-    Now, we can substitute our solution for r(1-p) into this new equation and solve for r:
-
-    $$
-    \frac{6p}{p^2} = 18
-    $$
-
-    $$
-    p = \frac{6}{18} = \frac{1}{3}
-    $$
-
-    Plugging this value back into the equation with r, we find that
-
-    $$
-    r\left(1 - \frac{1}{3}\right) = 6 \times \frac{1}{3}
-    $$
-
-    $$
-    r = \frac{2}{\frac{2}{3}} = 3
-    $$
-
-    Now, we have both of our parameters for the negative binomial distribution.
+    Now, we have both of our parameters for the negative binomial distribution. Therefore, we have a distribution as follows: $X \sim \textrm{NegBinom}(3, \frac{2}{3})$
 
     Show through histograms and summary statistics that your negative binomial distribution is equivalent to the gamma-Poisson mixture. You can use rnbinom() in R.
 
@@ -270,7 +242,7 @@ b.  A negative binomial distribution can actually be expressed as a gamma-Poisso
     set.seed(26)
 
     r_nb <- 3     
-    p_nb <- 1/3      
+    p_nb <- 2/3      
 
     nb <- rnbinom(10000, size = r_nb, prob = p_nb)
 
@@ -290,11 +262,11 @@ b.  A negative binomial distribution can actually be expressed as a gamma-Poisso
     var(nb)
     ```
 
-    We can see that the histogram for this negative binomial distribution has approximately the same shape and median as the gamma-Poisson mixture. Also, the mean and variance are approximately equal for both distributions (mean = 6, variance = 18).
+    We can see that the histogram for this negative binomial distribution has approximately the same shape and median as the gamma-Poisson mixture. Also, the mean and variance are approximately equal for both distributions.
 
-c.  Make an argument that if you want a $\textrm{NegBinom}(r, p)$ random variable, you can instead sample from a Poisson distribution, where the $\lambda$ values are themselves sampled from a gamma distribution with parameters $r$ and $\lambda' = \frac{1-p}{p}$. You may show equivalency via the simulations or mathematically, however, make sure your arguments are precise and clear.
+c.  Make an argument that if you want a $\textrm{NegBinom}(r, p)$ random variable, you can instead sample from a Poisson distribution, where the $\lambda$ values are themselves sampled from a gamma distribution with parameters $r$ and $\lambda' = \frac{p}{1-p}$. You may show equivalency via the simulations or mathematically, however, make sure your arguments are precise and clear.
 
-    We have just conducted two simulations that outputted approximately equivalent results. In the first simulation, the gamma-Poisson distribution, we drew 10,000 times from this distribution modeled by $Z \sim \textrm{P oisson}(\lambda)$where $\lambda \sim \textrm{Gamma}(r = 3, \lambda' = 2)$. In the second simulation, we drew 10,000 times from a a distribution modeled by $\textrm{NegBinom}(3, \frac{1}{3})$. As we can see, the $\lambda'$ value (= 2) used in the gamma-Poisson distribution is equal to $\frac{1-p}{p}$ where $p = \frac{1}{3}$. We could see when comparing the histograms that the shape of the distributions are equal. The visualization below shows the two histograms overlapped to illustrate the equivalency.
+    We have just conducted two simulations that outputted approximately equivalent results. In the first simulation, the gamma-Poisson distribution, we drew 10,000 times from this distribution modeled by $Z \sim \textrm{Poisson}(\lambda)$where $\lambda \sim \textrm{Gamma}(r = 3, \lambda' = 2)$. In the second simulation, we drew 10,000 times from a a distribution modeled by $\textrm{NegBinom}(3, \frac{2}{3})$. As we can see, the $\lambda'$ value (= 2) used in the gamma-Poisson distribution is equal to $\frac{p}{1-p}$ where $p = \frac{2}{3}$. We could see when comparing the histograms that the shape of the distributions are equal. The visualization below shows the two histograms overlapped to illustrate the equivalency.
 
     ```{r}
 
@@ -314,7 +286,7 @@ c.  Make an argument that if you want a $\textrm{NegBinom}(r, p)$ random variabl
       theme(legend.title = element_blank())
     ```
 
-    From the descriptive statistics gathered in the previous section, we also found that the means and variances of the two distributions were equal (mean = 6, variance = 18). Through visualization and simulation, we have shown empirically that if you want a $\textrm{NegBinom}(r, p)$ random variable, you can instead sample from a Poisson distribution, where the $\lambda$ values are themselves sampled from a gamma distribution with parameters $r$ and $\lambda' = \frac{1-p}{p}$.
+    From the descriptive statistics gathered in the previous section, we also found that the means and variances of the two distributions were approximately equal. Through visualization and simulation, we have shown empirically that if you want a $\textrm{NegBinom}(r, p)$ random variable, you can instead sample from a Poisson distribution, where the $\lambda$ values are themselves sampled from a gamma distribution with parameters $r$ and $\lambda' = \frac{1-p}{p}$.
 
 <!-- -->
 
@@ -343,7 +315,7 @@ a.  Visualize the distribution of the response variable totalIssuePages. Why mig
     issues <- read.csv("ambiguity.csv")
 
     ggplot(issues, aes(x = totalIssuePages)) +
-      geom_histogram(binwidth = 1, fill = "lightblue", color = "black", alpha = 0.7) +
+      geom_histogram(fill = "lightblue", color = "black", alpha = 0.7) +
       labs(title = "Distribution of # of issues candidates commented on",
            x = "Number of Issues Commented On", y = "Frequency") +
       theme_minimal() +
@@ -381,23 +353,43 @@ b.  Create a plot of the empirical log odds of having at least one issue stateme
 
 c.  Create a hurdle model with ideology and democrat as predictors in both parts. Display the model. Interpret ideology in both parts of the model.
 
-    ```{r}
+    ```{r, message = F, warning = F}
 
     library(pscl)
 
     hurdle_model <- hurdle(totalIssuePages ~ ideology + democrat, data = issues_new, dist = "poisson")
 
-    summary(hurdle_model)
+    coef(hurdle_model)|>
+      tidy(digits = 4) |>
+      kable()
     ```
-
-d.  Repeat (d), but include an interaction in both parts. Interpret the interaction in the zero hurdle part of the model.
 
     ```{r}
 
+    exp(-0.005902)
+    ```
+
+    For every 1 point increase in the ideology scale, the average number of issues commented on is expected to be multiplied by approximately 0.994 while controlling for whether or not a candidate is a Democrat.
+
+    For every 1 point increase in the ideology scale, the log odds of having at least one issue statement is expected to increase by 0.575 while controlling for whether or not a candidate is a Democrat.
+
+d.  Repeat (d), but include an interaction in both parts. Interpret the interaction in the zero hurdle part of the model.
+
+    ```{r, message = F, warning = F}
+
     hurdle_model_int <- hurdle(totalIssuePages ~ ideology + democrat + ideology * democrat, data = issues_new, dist = "poisson")
 
-    summary(hurdle_model_int)
+    coef(hurdle_model_int)|>
+      tidy(digits = 4) |>
+      kable()
     ```
+
+    ```{r}
+
+    (1.3667 - 1.3995)
+    ```
+
+    For Democrats candidates, for a 1 point increase in the ideology scale, we expect the log odds of having at least one issue statement to decrease by 0.0328 while controlling for the other variables in the model.
 
 # Grading
 
