@@ -1,0 +1,335 @@
+---
+title: 'Generalized Linear Models'
+author: "STA 310: Homework 5, Luke Flyer"
+output: pdf_document
+---
+
+1.  The probability density function (PDF) of the Pareto Type I distribution is given by:
+
+$$
+f(x) = \frac{\alpha x_m^\alpha}{x^{\alpha+1}} \mathbf{1}_{\{x \geq x_m\}}
+$$
+
+where:
+
+```{=tex}
+\begin{itemize}
+    \item \( \mathbf{1}_{\{x \geq x_m\}} \) is the indicator function, which is 1 if \( x \geq x_m \) and 0 otherwise.
+    \item \( \alpha > 0 \) is the shape parameter.
+    \item \( x_m > 0 \) is the scale parameter (minimum possible value) of the data.
+\end{itemize}
+```
+Is this a member of the exponential family (in canonical form), where both parameters are unknown? If so, identify the components in canonical form. If not, explain why not.
+
+This is not a member of the exponential family because its support depends on the parameter $x_m$, as noted by the indicator function, which includes the constraint $x \geq x_m$. Because $x_m$ is unknown, this dependence of the support on the value of the parameter excludes this distribution from being a part of the exponential family.
+
+\newpage
+
+2.  Assume a logistic regression model (i.e., binary regression under canonical link). Assume that $y_i$ is binary with success probability $p$ and $i=1, \ldots, n.$ Specifically, in (simplified) logistic regression, we have that
+
+$$
+\log\!\left(\frac{p}{1-p}\right) = X_{n \times p} \boldsymbol\beta_{p \times 1},
+$$ Note that $X_i^T$ is a row vector where it's dimension is $1 \times p.$ a. Provide the log-likelihood function as a function of the regression parameters. That is, show that
+
+The log-likelihood function for logistic regression is $$
+\begin{aligned}
+\mathcal{L}(p) &= \prod_{i=1}^n f(y_i) \\
+&= \prod_{i=1}^n p^{\,y_i}(1-p)^{\,1-y_i}, \\
+\log\mathcal{L}(p) &= \sum_{i=1}^n \Bigl[ y_i\log(p) + \log(1-p) - y_i\log(1-p) \Bigr] \\
+&= \sum_{i=1}^n \Bigl[ y_i\,\log\!\left(\frac{p}{1-p}\right) + \log(1-p) \Bigr].
+\end{aligned}
+$$
+
+Recall that $$
+\log\!\left(\frac{p}{1-p}\right) = \mathbf{X}\boldsymbol\beta,
+$$ so the log-likelihood becomes
+
+$$
+\log\mathcal{L}(p) = \sum_{i=1}^n \Bigl[ y_i\,\mathbf{X}_i^T\boldsymbol\beta - \log\!\left(1+\exp\bigl(\mathbf{X}_i^T\boldsymbol\beta\bigr)\right) \Bigr].
+$$
+
+In matrix notation, we can write the expression as
+
+$$
+\log\mathcal{L}(\beta) = \boldsymbol{y}^T X \boldsymbol\beta - 
+\boldsymbol{1}^T \log(\boldsymbol{1} + \exp(X \boldsymbol\beta))
+$$
+
+b.  Show (derive) the score functions of the log-likelihood with respect to the regression parameters is as follows:
+
+$$
+\nabla_{\boldsymbol\beta} \log\mathcal{L}(p) = \sum_{i=1}^n \left[ y_i\,\mathbf{X}_i - \frac{\exp(\mathbf{X}_i^T\boldsymbol\beta)}{1+\exp(\mathbf{X}_i^T\boldsymbol\beta)}\,\mathbf{X}_i \right].
+$$
+
+We differentiate the log-likelihood with respect to the parameter vector $\boldsymbol\beta$. The log likelihood is:
+
+$$
+\log\mathcal{L}(p) = \sum_{i=1}^n \Bigl[ y_i\,\mathbf{X}_i^T\boldsymbol\beta - \log\!\left(1+\exp\bigl(\mathbf{X}_i^T\boldsymbol\beta\bigr)\right) \Bigr].
+$$
+
+The first term is:
+
+$$
+\frac{\partial}{\partial \boldsymbol\beta} \left( y_i \mathbf{X}_i^T \boldsymbol\beta \right) = y_i \mathbf{X}_i
+$$
+
+The second term is $-\log\left(1 + \exp(\mathbf{X}_i^T \boldsymbol\beta)\right)$, and we need to use the chain rule. First, we differentiate the logarithmic part:
+
+$$
+\frac{\partial}{\partial \boldsymbol\beta} \left( \log\left(1 + \exp(\mathbf{X}_i^T \boldsymbol\beta)\right) \right) = \frac{1}{1 + \exp(\mathbf{X}_i^T \boldsymbol\beta)} \cdot \frac{\partial}{\partial \boldsymbol\beta} \left( \exp(\mathbf{X}_i^T \boldsymbol\beta) \right)
+$$
+
+Next, we differentiate $\exp(\mathbf{X}_i^T \boldsymbol\beta)$ with respect to $\boldsymbol\beta$:
+
+$$
+\frac{\partial}{\partial \boldsymbol\beta} \left( \exp(\mathbf{X}_i^T \boldsymbol\beta) \right) = \exp(\mathbf{X}_i^T \boldsymbol\beta) \mathbf{X}_i
+$$
+
+So, the complete derivative of the second term is:
+
+$$
+\frac{\partial}{\partial \boldsymbol\beta} \left( -\log\left(1 + \exp(\mathbf{X}_i^T \boldsymbol\beta)\right) \right) = - \frac{\exp(\mathbf{X}_i^T \boldsymbol\beta)}{1 + \exp(\mathbf{X}_i^T \boldsymbol\beta)} \mathbf{X}_i
+$$
+
+Combining the first and second terms, we obtain the score functions of the log-likelihood:
+
+$$
+\nabla_{\boldsymbol\beta} \log \mathcal{L}(p) = \sum_{i=1}^n \left[ y_i \mathbf{X}_i - \frac{\exp(\mathbf{X}_i^T \boldsymbol\beta)}{1 + \exp(\mathbf{X}_i^T \boldsymbol\beta)} \mathbf{X}_i \right]
+$$
+
+You may also write the expression in matrix notation as follows:
+
+Define $\pi_i = \frac{\exp(\mathbf{X}_i^T\boldsymbol\beta)}{1+\exp(\mathbf{X}_i^T\boldsymbol\beta)}$. Then,
+
+$$
+\nabla_{\boldsymbol\beta} \log\mathcal{L}(p) = X^T(\boldsymbol{y} - \boldsymbol\pi)
+$$
+
+c.  Show (derive) the Hessian function of the log-likelihood with respect to the regression parameters is as follows:
+
+$$
+\nabla^2_{\boldsymbol\beta} \log\mathcal{L}(p) = -\sum_{i=1}^n \left[ \frac{1}{1+\exp(\mathbf{X}_i^T\boldsymbol\beta)} \cdot \frac{\exp(\mathbf{X}_i^T\boldsymbol\beta)}{1+\exp(\mathbf{X}_i^T\boldsymbol\beta)}\,\mathbf{X}_i\,\mathbf{X}_i^T \right].
+$$
+
+Begin with the score function of the log-likelihood (from above):
+
+$$
+\nabla_{\boldsymbol\beta} \log \mathcal{L}(p) = \sum_{i=1}^n \left[ y_i \mathbf{X}_i - \frac{\exp(\mathbf{X}_i^T \boldsymbol\beta)}{1 + \exp(\mathbf{X}_i^T \boldsymbol\beta)} \mathbf{X}_i \right]
+$$
+
+We need to differentiate this score function with respect to $\boldsymbol\beta$ to obtain the Hessian.
+
+The first term is $y_i \mathbf{X}_i$, and its derivative with respect to $\boldsymbol\beta$ is 0, since it does not involve $\boldsymbol\beta$.
+
+The second term is:
+
+$$
+- \frac{\exp(\mathbf{X}_i^T \boldsymbol\beta)}{1 + \exp(\mathbf{X}_i^T \boldsymbol\beta)} \mathbf{X}_i
+$$
+
+We need to differentiate this term with respect to $\boldsymbol\beta$. To do this, we first differentiate the fraction $\frac{\exp(\mathbf{X}_i^T \boldsymbol\beta)}{1 + \exp(\mathbf{X}_i^T \boldsymbol\beta)}$ with respect to $\boldsymbol\beta$. Using the quotient rule:
+
+$$
+\frac{\partial}{\partial \boldsymbol\beta} \left( \frac{\exp(\mathbf{X}_i^T \boldsymbol\beta)}{1 + \exp(\mathbf{X}_i^T \boldsymbol\beta)} \right) = \frac{(1 + \exp(\mathbf{X}_i^T \boldsymbol\beta)) \cdot \exp(\mathbf{X}_i^T \boldsymbol\beta) \mathbf{X}_i - \exp(\mathbf{X}_i^T \boldsymbol\beta) \cdot \exp(\mathbf{X}_i^T \boldsymbol\beta) \mathbf{X}_i}{(1 + \exp(\mathbf{X}_i^T \boldsymbol\beta))^2}
+$$
+
+which will simplify to:
+
+$$
+\frac{\exp(\mathbf{X}_i^T \boldsymbol\beta) \mathbf{X}_i}{(1 + \exp(\mathbf{X}_i^T \boldsymbol\beta))^2}.
+$$
+
+The complete Hessian function is the sum of second derivatives over all $n$ observations:
+
+$$
+\nabla^2_{\boldsymbol\beta} \log \mathcal{L}(p) = - \sum_{i=1}^n \left[ \frac{\exp(\mathbf{X}_i^T \boldsymbol\beta) \mathbf{X}_i \mathbf{X}_i^T}{(1 + \exp(\mathbf{X}_i^T \boldsymbol\beta))^2} \right].
+$$
+
+which can also be written as:
+
+$$
+\nabla^2_{\boldsymbol\beta} \log\mathcal{L}(p) = -\sum_{i=1}^n \left[ \frac{1}{1+\exp(\mathbf{X}_i^T\boldsymbol\beta)} \cdot \frac{\exp(\mathbf{X}_i^T\boldsymbol\beta)}{1+\exp(\mathbf{X}_i^T\boldsymbol\beta)}\,\mathbf{X}_i\,\mathbf{X}_i^T \right].
+$$
+
+You may also write the expression in matrix notation as follows:
+
+Let $W = diag \{ \pi_1(1- \pi_1), \ldots, \pi_n (1- \pi_n) \}.$ It follows that the Hessian can be written as $-X^T W X.$
+
+d.  Using the previous steps to write out the Newton-Raphson Algorithm in matrix form.
+
+    Newton-Raphson updating rule:
+
+    $$
+    \boldsymbol\beta^{(t+1)} = \boldsymbol\beta^{(t)} - \left[ \nabla^2_{\boldsymbol\beta} \log \mathcal{L}(p) \right]^{-1} \nabla_{\boldsymbol\beta} \log \mathcal{L}(p)
+    $$
+
+    From above, we can define $\pi_i = \frac{\exp(\mathbf{X}_i^T\boldsymbol\beta)}{1+\exp(\mathbf{X}_i^T\boldsymbol\beta)}$. Then,
+
+    $$
+    \nabla_{\boldsymbol\beta} \log\mathcal{L}(p) = X^T(\boldsymbol{y} - \boldsymbol\pi)
+    $$
+
+    The Hessian is:
+
+$$
+\nabla^2_{\boldsymbol\beta} \log \mathcal{L}(p) = - \mathbf{X}^T \mathbf{W} \mathbf{X}
+$$
+
+where $\mathbf{W}$ is a $n \times n$ diagonal matrix with elements $w_i = \pi_i(1 - \pi_i)$. The diagonal of matrix $\mathbf{W}$ is:
+
+$$
+w_i = \frac{\exp(-\mathbf{X}_i^T \boldsymbol\beta)}{\left( 1 + \exp(-\mathbf{X}_i^T \boldsymbol\beta) \right)^2}
+$$
+
+Now we plug the gradient and Hessian into the Newton-Raphson update rule (written in matrix form):
+
+$$
+\boldsymbol\beta^{(t+1)} = \boldsymbol\beta^{(t)} - \left( \mathbf{X}^T \mathbf{W} \mathbf{X} \right)^{-1} \mathbf{X}^T \left( \mathbf{y} - \boldsymbol\pi \right)
+$$
+
+e.  A researcher is interested in how variables, such as GRE (Graduate Record Exam scores), GPA (grade point average) and prestige of the undergraduate institution, effect admission into graduate school. The response variable, admit/don’t admit, is a binary variable, which can be read in using the command below.
+
+Consider running a logistic regression using the glm() function in R below. Write your own function to implement the Newton Raphson algorithm to output the regression coefficients, and verify that the coefficients match those from the glm() function.
+
+```{r}
+df <- read.csv('https://stats.idre.ucla.edu/stat/data/binary.csv')
+mylogit <- glm(admit ~ gre + gpa + rank, data = df, family = "binomial"(link = "logit"))
+summary(mylogit)
+```
+
+```{r}
+
+logistic_Newton_Raphson <- function(x, y, b.init, tol = 1e-8) {
+  change <- Inf
+  b.old <- b.init 
+  while (change > tol) {
+    eta <- x %*% b.old 
+    p <- 1 / (1 + exp(-eta)) 
+    W <- diag(as.vector(p * (1 - p)), nrow = nrow(x), ncol = nrow(x))
+    b.new <- b.old + solve(t(x) %*% W %*% x) %*% t(x) %*% (y - p)
+    change <- sqrt(sum((b.new - b.old)^2))
+    b.old <- b.new
+  }
+  return(b.new)
+}
+
+
+y <- df[, 1]  
+x <- as.matrix(cbind(rep(1, 400), df[, c(2, 3, 4)])) 
+
+b.init <- rep(0, ncol(x))
+
+logistic_Newton_Raphson(x, y, b.init)
+
+
+```
+
+It looks like the regression coefficients from the glm() function and the Newton Raphson algorithm match, so now we can see how R might be running this process behind the curtain.
+
+\newpage
+
+3.  Propose a homework exercise that you believe would help reinforce the class content to students in this class. You may not repeat any exercise explicitly that was used in class and this exercise should be done individually.
+
+Write and propose the question(s), include a rubric, and include a solution.
+
+You may utilize online resource, but please do cite them if you use them and provide details.
+
+## Exercise: Poisson Distribution mean and variance
+
+a\. Express a the following Poisson distribution in canonical form (as it is a part of the exponential family), and list the components:
+
+$$
+f(x | \lambda) = \frac{\lambda^x e^{-\lambda}}{x!}, \quad x = 0, 1, 2, \dots
+$$
+
+Where:
+
+\- $\lambda > 0$ is the rate parameter (mean of the distribution),
+
+\- $x$ is the number of occurrences of an event (non-negative integer).
+
+b\. Using the canonical form of the Poisson distribution, calculate the mean and variance of the distribution (hint: log-partition function)
+
+## Solution
+
+a\.
+
+We want to express the Poisson distribution in the canonical form:
+
+$$
+f(x | \theta) = h(x) \exp \left( \eta(\theta) T(x) - \psi(\theta) \right)
+$$
+
+By manipulating the original Poisson form with this, we can express it like this:
+
+$$
+f(x | \lambda) = \frac{1}{x!} \exp \left( x \log(\lambda) - \lambda \right)
+$$
+
+The components are as follows:
+
+-   $h(x) = \frac{1}{x!}$,
+-   $T(x) = x$,
+-   $\eta(\lambda) = \log(\lambda)$,
+-   $\psi(\lambda) = \lambda$.
+
+The log-partition function $\psi(\lambda)$ is simply:
+
+$$
+\psi(\lambda) = \lambda
+$$
+
+This function normalizes the distribution, ensuring the total probability sums to 1.
+
+b\.
+
+To calculate the mean $\mathbb{E}[X]$, we take the derivative of the log-partition function $\psi(\lambda) = \lambda$ with respect to the $\eta(\lambda)$.
+
+We already have:
+
+$$
+\eta(\lambda) = \log(\lambda)
+$$
+
+Solving for $\lambda$:
+
+$$
+\lambda = e^{\eta(\lambda)}
+$$
+
+The mean is the derivative of $\psi(\lambda)$ with respect to $\eta(\lambda)$:
+
+$$
+\mathbb{E}[X] = \frac{d}{d\eta(\lambda)} \psi(\lambda) = \frac{d}{d\eta(\lambda)} e^{\eta(\lambda)} = e^{\eta(\lambda)}$$
+
+Thus, the mean of the Poisson distribution is $\mathbb{E}[X] = e^{\eta(\lambda)} = \lambda$.
+
+To calculate the variance $\text{Var}(X)$, we take the second derivative of $\psi(\lambda)$ with respect to $\eta(\lambda)$.
+
+The second derivative gives us the variance:
+
+$$
+\text{Var}(X) = \frac{d^2}{d\eta(\lambda)^2} \psi(\lambda) = \frac{d^2}{d\eta(\lambda)^2} e^{\eta(\lambda)} = e^{\eta(\lambda)}
+$$
+
+Thus, the variance of the Poisson distribution is $\text{Var}(X) = e^{\eta(\lambda)} = \lambda$.
+
+## Rubric
+
+Total = 4 points
+
+Correct part a. = 2 points
+
+-   -1 for canonical form incorrect
+
+-   -0.25 for each of the components that are incorrect
+
+Correct part b. = 2 points
+
+-   -1 for not using the log-partition function at all
+
+-   -0.5 for not using the log-partition function correctly
+
+-   -0.5 for incorrect mean calculation
+
+-   -0.5 for incorrect variance calculation
