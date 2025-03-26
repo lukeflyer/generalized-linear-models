@@ -172,7 +172,7 @@ d.  Using the previous steps to write out the Newton-Raphson Algorithm in matrix
     The Hessian is:
 
 $$
-\nabla^2_{\boldsymbol\beta} \log \mathcal{L}(p) = - \mathbf{X}^T \mathbf{W} \mathbf{X}
+\nabla^2_{\boldsymbol\beta} \log \mathcal{L}(p) = - {X}^T {W}{X}
 $$
 
 where $\mathbf{W}$ is a $n \times n$ diagonal matrix with elements $w_i = \pi_i(1 - \pi_i)$. The diagonal of matrix $\mathbf{W}$ is:
@@ -184,7 +184,7 @@ $$
 Now we plug the gradient and Hessian into the Newton-Raphson update rule (written in matrix form):
 
 $$
-\boldsymbol\beta^{(t+1)} = \boldsymbol\beta^{(t)} - \left( \mathbf{X}^T \mathbf{W} \mathbf{X} \right)^{-1} \mathbf{X}^T \left( \mathbf{y} - \boldsymbol\pi \right)
+\boldsymbol\beta^{(t+1)} = \boldsymbol\beta^{(t)} + \left({X}^T{W}{X} \right)^{-1}{X}^T \left( \mathbf{y} - \boldsymbol\pi \right)
 $$
 
 e.  A researcher is interested in how variables, such as GRE (Graduate Record Exam scores), GPA (grade point average) and prestige of the undergraduate institution, effect admission into graduate school. The response variable, admit/don’t admit, is a binary variable, which can be read in using the command below.
@@ -236,7 +236,7 @@ You may utilize online resource, but please do cite them if you use them and pro
 
 ## Exercise: Poisson Distribution mean and variance
 
-a\. Express a the following Poisson distribution in canonical form (as it is a part of the exponential family), and list the components:
+a\. Express the following Poisson distribution in canonical form (as it is a part of the exponential family), and list the components:
 
 $$
 f(x | \lambda) = \frac{\lambda^x e^{-\lambda}}{x!}, \quad x = 0, 1, 2, \dots
@@ -273,15 +273,13 @@ The components are as follows:
 -   $\eta(\lambda) = \log(\lambda)$,
 -   $\psi(\lambda) = \lambda$.
 
-The log-partition function $\psi(\lambda)$ is simply:
+b\.
+
+The log-partition function $\psi(\lambda)$ is:
 
 $$
 \psi(\lambda) = \lambda
 $$
-
-This function normalizes the distribution, ensuring the total probability sums to 1.
-
-b\.
 
 To calculate the mean $\mathbb{E}[X]$, we take the derivative of the log-partition function $\psi(\lambda) = \lambda$ with respect to the $\eta(\lambda)$.
 
@@ -300,7 +298,7 @@ $$
 The mean is the derivative of $\psi(\lambda)$ with respect to $\eta(\lambda)$:
 
 $$
-\mathbb{E}[X] = \frac{d}{d\eta(\lambda)} \psi(\lambda) = \frac{d}{d\eta(\lambda)} e^{\eta(\lambda)} = e^{\eta(\lambda)}$$
+\mathbb{E}[X] = \frac{d}{d\eta(\lambda)} \psi(\lambda) = \frac{d}{d\eta(\lambda)} \lambda = \frac{d}{d\eta(\lambda)} e^{\eta(\lambda)} = e^{\eta(\lambda)}$$
 
 Thus, the mean of the Poisson distribution is $\mathbb{E}[X] = e^{\eta(\lambda)} = \lambda$.
 
@@ -309,7 +307,7 @@ To calculate the variance $\text{Var}(X)$, we take the second derivative of $\ps
 The second derivative gives us the variance:
 
 $$
-\text{Var}(X) = \frac{d^2}{d\eta(\lambda)^2} \psi(\lambda) = \frac{d^2}{d\eta(\lambda)^2} e^{\eta(\lambda)} = e^{\eta(\lambda)}
+\text{Var}(X) = \frac{d^2}{d\eta(\lambda)^2} \psi(\lambda) = \frac{d^2}{d\eta(\lambda)^2} \lambda = \frac{d^2}{d\eta(\lambda)^2} e^{\eta(\lambda)} = e^{\eta(\lambda)}
 $$
 
 Thus, the variance of the Poisson distribution is $\text{Var}(X) = e^{\eta(\lambda)} = \lambda$.
@@ -318,18 +316,16 @@ Thus, the variance of the Poisson distribution is $\text{Var}(X) = e^{\eta(\lamb
 
 Total = 4 points
 
-Correct part a. = 2 points
+Part a. = 2 points
 
--   -1 for canonical form incorrect
+-   1 point for canonical form correct
 
--   -0.25 for each of the components that are incorrect
+-   0.25 points for each of the components that are correct
 
-Correct part b. = 2 points
+Part b. = 2 points
 
--   -1 for not using the log-partition function at all
+-   1 point for correct usage of the log-partition function
 
--   -0.5 for not using the log-partition function correctly
+-   0.5 points for correct mean calculation
 
--   -0.5 for incorrect mean calculation
-
--   -0.5 for incorrect variance calculation
+-   0.5 points for correct variance calculation
