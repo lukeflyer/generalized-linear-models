@@ -236,9 +236,7 @@ You may utilize online resource, but please do cite them if you use them and pro
 
 ## Exercise: Poisson Distribution mean and variance
 
-a\. Express the Poisson distribution below, $X$, in canonical form as such,$
-f(x | \lambda) = h(x) \exp \left( \eta(\lambda) T(x) - \psi(\lambda) \right)
-$ AND list the components. Here is the Poisson distribution:
+a\. Express the Poisson distribution below, $X$, in canonical form as such, $$f(x | \lambda) = h(x) \exp \left( \eta(\lambda) T(x) - \psi(\lambda) \right)$$, AND list the components. Here is the Poisson distribution:
 
 $$
 f(x | \lambda) = \frac{\lambda^x e^{-\lambda}}{x!}, \quad x = 0, 1, 2, \dots
