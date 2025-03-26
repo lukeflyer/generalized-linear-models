@@ -236,7 +236,9 @@ You may utilize online resource, but please do cite them if you use them and pro
 
 ## Exercise: Poisson Distribution mean and variance
 
-a\. Express the following Poisson distribution in canonical form (as it is a part of the exponential family), and list the components:
+a\. Express the Poisson distribution below, $X$, in canonical form as such,$
+f(x | \lambda) = h(x) \exp \left( \eta(\lambda) T(x) - \psi(\lambda) \right)
+$ AND list the components. Here is the Poisson distribution:
 
 $$
 f(x | \lambda) = \frac{\lambda^x e^{-\lambda}}{x!}, \quad x = 0, 1, 2, \dots
@@ -257,7 +259,7 @@ a\.
 We want to express the Poisson distribution in the canonical form:
 
 $$
-f(x | \theta) = h(x) \exp \left( \eta(\theta) T(x) - \psi(\theta) \right)
+f(x | \lambda) = h(x) \exp \left( \eta(\lambda) T(x) - \psi(\lambda) \right)
 $$
 
 By manipulating the original Poisson form with this, we can express it like this:
