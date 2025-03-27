@@ -191,7 +191,7 @@ e.  A researcher is interested in how variables, such as GRE (Graduate Record Ex
 
 Consider running a logistic regression using the glm() function in R below. Write your own function to implement the Newton Raphson algorithm to output the regression coefficients, and verify that the coefficients match those from the glm() function.
 
-```{r}
+```{r, message = F, warning = F}
 
 library(tidyverse)
 library(tidymodels)
