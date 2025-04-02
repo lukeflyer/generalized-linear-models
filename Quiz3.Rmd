@@ -1,0 +1,124 @@
+---
+title: 'Quiz 3'
+author: "Luke Flyer"
+output: pdf_document
+---
+
+```{r}
+
+library(knitr)
+library(magrittr)
+library(kableExtra)
+```
+
+## Question 1
+
+It seems like it would be acceptable to use a quasiPoisson model even when the data does not exhibit overdispersion. Of course, it would certainly over-complicate things by adding the extra dispersion parameter, but the resulting model would still be valid. We would expect the dispersion parameter to be equal to 1.0 if the data follows a Poisson distribution (mean = variance).
+
+## Question 2
+
+The support of this distribution if {1, 2, 3, ...}, or the set of all integers greater than or equal to one. This means that $Y$ can take on only these possible values.
+
+## Question 3
+
+Start with the PMF:
+
+$$
+P(Y = y) = \frac{e^{-\lambda} \lambda^y}{(1 - e^{-\lambda}) y!}
+$$
+
+We want to express this distribution in the canonical form, which is:
+
+$$
+f(y | \lambda) = h(y) \exp \left( \eta(\lambda) T(y) - \psi(\lambda) \right)
+$$
+
+Manipulating the original function:
+
+$$
+P(Y = y) = \frac{1}{y!} \cdot \frac{e^{-\lambda} \lambda^y}{1 - e^{-\lambda}}
+$$
+
+$$
+P(Y = y) = \frac{1}{y!} \cdot \frac{e^{-\lambda} e^{y \log(\lambda)}}{1 - e^{-\lambda}}
+$$
+
+$$
+P(Y = y) = \frac{1}{y!} \cdot \exp\left( -\lambda + y \log(\lambda) \right) \cdot \frac{1}{1 - e^{-\lambda}}
+$$
+
+$$
+P(Y = y) = \frac{1}{y!} \cdot \exp\left( -\lambda + y \log(\lambda) - \log(1 - e^{-\lambda}) \right)
+$$
+
+Now we have the canonical form:
+
+$$
+P(Y = y) = \frac{1}{y!} \cdot \exp\left( y \log(\lambda) - \log(1 - e^{-\lambda}) - \lambda \right)
+$$
+
+where:
+
+$$
+h(y) = \frac{1}{y!}, \quad \eta(\lambda) = \log(\lambda), \quad T(y) = y, \quad \psi(\lambda) = \log(1 - e^{-\lambda}) + \lambda
+$$
+
+## Question 4
+
+We start with the log-partition function for the zero-truncated Poisson distribution:
+
+$$
+\psi(\lambda) = \log(1 - e^{-\lambda}) + \lambda
+$$
+
+The canonical parameter is $\eta(\lambda) = \log(\lambda)$, so $\lambda = e^{\eta(\lambda)}$.
+
+To compute the expected value $\mathbb{E}[Y]$, we take the derivative of $\psi(\lambda)$ with respect to $\eta(\lambda)$:
+
+$$
+\mathbb{E}[Y] = \frac{d}{d\eta(\lambda)} \psi(\lambda)
+$$
+
+Using the chain rule:
+
+$$
+\mathbb{E}[Y] = \frac{d}{d\lambda} \psi(\lambda) \cdot \frac{d\lambda}{d\eta(\lambda)}
+$$
+
+We already know that $\frac{d\lambda}{d\eta(\lambda)} = \lambda$ because:$\frac{d}{d\eta(\lambda)} e^{\eta(\lambda)} = e^{\eta(\lambda)} = \lambda$.
+
+Now, compute $\frac{d}{d\lambda} \psi(\lambda)$:
+
+$$
+\frac{d}{d\lambda} \psi(\lambda) = \frac{e^{-\lambda}}{1 - e^{-\lambda}} + 1
+$$
+
+Now combine the derivative with the chain rule result:
+
+$$
+\mathbb{E}[Y] = \lambda \left( \frac{e^{-\lambda}}{1 - e^{-\lambda}} + 1 \right)
+$$
+
+Simplify:
+
+$$
+\mathbb{E}[Y] = \lambda \cdot \frac{1}{1 - e^{-\lambda}}
+$$
+
+and we can rearrange to get the following result:
+
+$$
+\mathbb{E}[Y] = \frac{\lambda e^{\lambda}}{e^{\lambda} - 1}
+$$
+
+## Question 5
+
+## Question 6
+
+## Question 7
+
+## Question 8
+
+## Question 9
+
+## Question 10
