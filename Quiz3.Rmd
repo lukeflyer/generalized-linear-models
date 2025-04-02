@@ -85,7 +85,7 @@ $$
 \mathbb{E}[Y] = \frac{d}{d\lambda} \psi(\lambda) \cdot \frac{d\lambda}{d\eta(\lambda)}
 $$
 
-We already know that $\frac{d\lambda}{d\eta(\lambda)} = \lambda$ because:$\frac{d}{d\eta(\lambda)} e^{\eta(\lambda)} = e^{\eta(\lambda)} = \lambda$.
+We already know that $\frac{d\lambda}{d\eta(\lambda)} = \lambda$ because: $\frac{d}{d\eta(\lambda)} e^{\eta(\lambda)} = e^{\eta(\lambda)} = \lambda$.
 
 Now, compute $\frac{d}{d\lambda} \psi(\lambda)$:
 
@@ -111,14 +111,108 @@ $$
 \mathbb{E}[Y] = \frac{\lambda e^{\lambda}}{e^{\lambda} - 1}
 $$
 
+suff stat part ADD ADD ADD ADD
+
 ## Question 5
+
+The canonical link is as follows:
+
+$$
+\log \left( E(Y | X) \right) = X \beta
+$$
+
+We know this because the canonical parameter (taken from the function written in canonical form is:
+
+$$\quad \eta(\lambda) = \log(\lambda)$$
+
+And we know that we can use this canonical parameter to derive the canonical link that will model the relationship between the predictors, $X \beta$, and the expected count, $E(Y | X)$.
 
 ## Question 6
 
+We just defined the canonical link for the distribution, which is the logarithm of the rate parameter $\lambda$:
+
+$$
+\log(\lambda) = X_i^T \beta
+$$
+
+Exponentiating both sides:
+
+$$
+\lambda = \exp(X_i^T \beta)
+$$
+
+The likelihood function for zero-truncated Poisson regression is as follows (plugging in $\lambda = \exp(X_i^T \beta)$):
+
+$$
+\mathcal{L}(\beta) = \prod_{i=1}^n \frac{e^{-\exp(X_i^T \beta)} (\exp(X_i^T \beta))^{y_i}}{(1 - e^{-\exp(X_i^T \beta)}) y_i!}
+$$
+
+Now, we take the log of both sides to get the log-likelihood:
+
+$$
+\log \mathcal{L}(\beta) = \sum_{i=1}^n \left[ -\exp(X_i^T \beta) + y_i \log(\exp(X_i^T \beta)) - \log(y_i!) - \log(1 - e^{-\exp(X_i^T \beta)}) \right]
+$$
+
+Simplifying $\log(\exp(X_i^T \beta)) = X_i^T \beta$, we get:
+
+$$
+\log \mathcal{L}(\beta) = \sum_{i=1}^n \left[ y_i X_i^T \beta - \exp(X_i^T \beta) - \log(y_i!) - \log(1 - e^{-\exp(X_i^T \beta)}) \right]
+$$
+
 ## Question 7
+
+The log-likelihood function for zero-truncated Poisson regression is:
+
+$$
+\log L(\boldsymbol{\beta}) = \sum_{i=1}^{n} \left[ y_i \mathbf{X}_i^\top \boldsymbol{\beta} - \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) - \log(y_i!) - \log \left( 1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \right) \right]
+$$
+
+Differentiating the first term:
+
+$$
+\frac{\partial}{\partial \boldsymbol{\beta}} \left( y_i \mathbf{X}_i^\top \boldsymbol{\beta} \right) = y_i \mathbf{X}_i
+$$
+
+Differentiating the second term:
+
+$$
+\frac{\partial}{\partial \boldsymbol{\beta}} \left( -\exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \right) = -\exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i
+$$
+
+Differentiating the third term:
+
+The third term $-\log(y_i!)$ does not depend on $\boldsymbol{\beta}$, so its derivative is zero.
+
+Differentiating the fourth term, using the chain rule to do so:
+
+$$
+\frac{\partial}{\partial \boldsymbol{\beta}} \left( -\log \left( 1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \right) \right)
+$$
+
+The derivative of the logarithmic part is:
+
+$$
+\frac{1}{1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))}
+$$
+
+Now, differentiate the inner term $-\exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))$ with respect to $\boldsymbol{\beta}$:
+
+$$
+\frac{\exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \cdot \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i}{1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))}
+$$
+
+Now, we have to combine all terms to get the score function, which is the sum of the derivatives:
+
+$$
+\nabla_{\boldsymbol{\beta}} \log L(\boldsymbol{\beta}) = \sum_{i=1}^{n} \left[ y_i \mathbf{X}_i - \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i - \frac{\exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \cdot \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i}{1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))} \right]
+$$
 
 ## Question 8
 
 ## Question 9
 
+The name is the Iteratively Re-weighted Least Squares algorithm.
+
 ## Question 10
+
+No.
