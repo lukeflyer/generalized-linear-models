@@ -79,7 +79,10 @@ $$
 \mathbb{E}[Y] = \frac{d}{d\eta(\lambda)} \psi(\lambda)
 $$
 
-Using the chain rule:
+We know this is the case because we know that the first and second derivatives of $\psi(\lambda)$ are the mean and
+variances, respectively, of the sufficient statistic $T(y)$. Since we know that $T(y) = y$, we can then say that the first and second derivatives of $\psi(\lambda)$ are the mean and variances, respectively, of $Y$. This is a convenient method of finding the mean when $T(y) = y$.
+
+For the calculation, we start by using the chain rule:
 
 $$
 \mathbb{E}[Y] = \frac{d}{d\lambda} \psi(\lambda) \cdot \frac{d\lambda}{d\eta(\lambda)}
@@ -110,8 +113,6 @@ and we can rearrange to get the following result:
 $$
 \mathbb{E}[Y] = \frac{\lambda e^{\lambda}}{e^{\lambda} - 1}
 $$
-
-suff stat part ADD ADD ADD ADD
 
 ## Question 5
 
@@ -195,7 +196,7 @@ $$
 \frac{1}{1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))}
 $$
 
-Now, differentiate the inner term $-\exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))$ with respect to $\boldsymbol{\beta}$:
+Now, differentiate the inner term $-\exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))$ with respect to $\boldsymbol{\beta}$, and put it in numerator:
 
 $$
 \frac{\exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \cdot \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i}{1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))}
@@ -207,7 +208,84 @@ $$
 \nabla_{\boldsymbol{\beta}} \log L(\boldsymbol{\beta}) = \sum_{i=1}^{n} \left[ y_i \mathbf{X}_i - \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i - \frac{\exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \cdot \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i}{1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))} \right]
 $$
 
+We factor out the common term $\exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i$ from the second and third terms: $$
+\nabla_{\boldsymbol{\beta}} \log L(\boldsymbol{\beta}) = \sum_{i=1}^{n} \left[ y_i \mathbf{X}_i - \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i \left( 1 + \frac{\exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))}{1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))} \right) \right]
+$$
+
+Simplifying the expression inside the parentheses: $$
+1 + \frac{\exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))}{1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))} = \frac{1}{1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))}
+$$
+
+Now we have our final score function which is: $$
+\nabla_{\boldsymbol{\beta}} \log L(\boldsymbol{\beta}) = \sum_{i=1}^{n} \left[ y_i \mathbf{X}_i - \frac{\exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i}{1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))} \right]
+$$
+
+Now, we can take another derivative to get the Hessian. The first term in the score function is $y_i \mathbf{X}_i$, so does not depend on $\boldsymbol{\beta}$. Therefore, its derivative with respect to $\boldsymbol{\beta}$ is zero:
+
+$$
+\frac{d}{d\boldsymbol{\beta}} \left( y_i \mathbf{X}_i \right) = 0
+$$
+
+For the second term in the score function we need to use the quotient rule. Define the following
+
+$$
+f(\boldsymbol{\beta}) = \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i
+$$ $$
+g(\boldsymbol{\beta}) = 1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))
+$$
+
+We will apply the quotient rule to get the second derivative:
+
+$$
+\frac{d}{d\boldsymbol{\beta}} \left( \frac{f(\boldsymbol{\beta})}{g(\boldsymbol{\beta})} \right) = \frac{g(\boldsymbol{\beta}) \frac{d}{d\boldsymbol{\beta}} f(\boldsymbol{\beta}) - f(\boldsymbol{\beta}) \frac{d}{d\boldsymbol{\beta}} g(\boldsymbol{\beta})}{g(\boldsymbol{\beta})^2}
+$$
+
+The derivative of $f(\boldsymbol{\beta})$:
+
+$$
+\frac{d}{d\boldsymbol{\beta}} f(\boldsymbol{\beta}) = \frac{d}{d\boldsymbol{\beta}} \left( \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i \right) = \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i \mathbf{X}_i^\top
+$$
+
+The derivative of $g(\boldsymbol{\beta})$:
+
+$$
+\frac{d}{d\boldsymbol{\beta}} g(\boldsymbol{\beta}) = \frac{d}{d\boldsymbol{\beta}} \left( 1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \right) = \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \cdot \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i
+$$
+
+Noww, plug into the quotient rule:
+
+$$
+\frac{d}{d\boldsymbol{\beta}} \left( \frac{\exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i}{1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))} \right)
+=
+$$
+
+$$
+\frac{(1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))) \cdot \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i \mathbf{X}_i^\top - \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i \cdot \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \cdot \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i}{(1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})))^2}
+$$
+
+Unsure if this can be simplified further, we now have our Hessian:
+
+$$
+\nabla_{\boldsymbol{\beta}}^2 \log L(\boldsymbol{\beta}) = \sum_{i=1}^{n} \frac{\exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i \mathbf{X}_i^\top \left( 1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \right) - \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i \cdot \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \cdot \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i}{\left( 1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \right)^2}
+$$
+
 ## Question 8
+
+The Newton-Raphson updating rule is as follows:
+
+$$
+\boldsymbol{\beta}^{(t+1)} = \boldsymbol{\beta}^{(t)} - \left[ \nabla^2_{\boldsymbol{\beta}} \log L(\boldsymbol{\beta}) \right]^{-1} \nabla_{\boldsymbol{\beta}} \log L(\boldsymbol{\beta})
+$$
+
+Now we can plug in both the score function and the Hessian, and we can have the full Newton-Raphson update rule:
+
+$$\boldsymbol{\beta}^{(t+1)} = \boldsymbol{\beta}^{(t)} - \left[ \sum_{i=1}^{n} \frac{\exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i \mathbf{X}_i^\top \left( 1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \right) - \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i \cdot \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \cdot \exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i}{\left( 1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta})) \right)^2}\right]^{-1}$$
+
+$$
+.\sum_{i=1}^{n} \left[ y_i \mathbf{X}_i - \frac{\exp(\mathbf{X}_i^\top \boldsymbol{\beta}) \mathbf{X}_i}{1 - \exp(-\exp(\mathbf{X}_i^\top \boldsymbol{\beta}))} \right]
+$$
+
+\*Keep in mind the above equation is written on 2 lines, as it would not fit into 1.
 
 ## Question 9
 
