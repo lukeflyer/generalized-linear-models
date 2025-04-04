@@ -117,8 +117,7 @@ $$
 
 The canonical link is as follows:
 
-$$\log(\lambda) = X_i^T \beta$$
-We know this because the canonical parameter (taken from the function written in canonical form) is:
+$$\log(\lambda) = X_i^T \beta$$ We know this because the canonical parameter (taken from the function written in canonical form) is:
 
 $$\quad \eta(\lambda) = \log(\lambda)$$
 
